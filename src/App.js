@@ -165,31 +165,41 @@ class Disegno extends React.Component {
 
   state = {
     color: "#444",
+    datiDisegno: null,
+    giaFatto: false
   };
 
   handleChangeComplete = (color, event) => {
     this.setState({ color: color.hex });
   };
 
-  getDisegno = () => {
+  componentDidMount() {
     let localDisegno = localStorage.getItem("arteInsiemeSalvataggio");
-    console.log(localDisegno);
-    if (localDisegno){
-      return localDisegno
-    }
-    const db = firebase.firestore();
-    let cityRef = db.collection("disegni").doc(firebase.auth().currentUser.email);
-    cityRef.get()
-      .then(doc => {
-        if (!doc.exists) {
-          return localDisegno;
-        } else {
-          return doc.data();
-        }
-      })
-      .catch(err => {
-        return localDisegno;
-      });
+    if (localDisegno != null){
+      console.log("OK");
+      console.log(localDisegno);
+      this.setState({ 
+        datiDisegno: localDisegno,
+       })
+    } else {
+      const db = firebase.firestore();
+      let cityRef = db.collection("disegni").doc(firebase.auth().currentUser.email);
+      cityRef.get()
+        .then(doc => {
+          if (!doc.exists) {
+            this.setState({ datiDisegno: localDisegno })
+          } else {
+            this.setState({ datiDisegno: doc.data().disegno })
+            localStorage.setItem(
+              "arteInsiemeSalvataggio",
+              doc.data().disegno
+            );
+          }
+        })
+        .catch(err => {
+          this.setState({ datiDisegno: localDisegno })
+        });
+      }
   }
 
   render() {
@@ -236,6 +246,7 @@ class Disegno extends React.Component {
               );
               const db = firebase.firestore();
               db.collection("disegni").doc(firebase.auth().currentUser.email).set({
+                disegno: this.saveableCanvas.getSaveData(),
               });              
             }}/>
         </Fab>
@@ -275,7 +286,7 @@ class Disegno extends React.Component {
         </Fab>
           <CanvasDraw
           ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
-          saveData={this.getDisegno()}
+          saveData={this.state.datiDisegno}
           brushColor={this.state.color}
           style={{
             width: window.innerWidth,//"95%",
