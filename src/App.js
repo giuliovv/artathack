@@ -19,11 +19,11 @@ import ListItem from '@material-ui/core/ListItem';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-
 import { makeStyles } from '@material-ui/core/styles';
+
+import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import AddIcon from '@material-ui/icons/Add';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import UndoIcon from '@material-ui/icons/Undo';
 import SaveIcon from '@material-ui/icons/Save';
@@ -173,12 +173,12 @@ class Disegno extends React.Component {
         />
         <Fab 
           color="secondary" 
-          aria-label="edit"
+          aria-label="save"
           style={{
             margin: 0,
             top: 'auto',
             right: 20,
-            bottom: 140,
+            bottom: 200,
             left: 'auto',
             position: 'fixed',
           }}
@@ -192,7 +192,23 @@ class Disegno extends React.Component {
         </Fab>
         <Fab 
           color="secondary" 
-          aria-label="edit"
+          aria-label="undo"
+          style={{
+            margin: 0,
+            top: 'auto',
+            right: 20,
+            bottom: 140,
+            left: 'auto',
+            position: 'fixed',
+          }}
+          >
+            <UndoIcon onClick={() => {
+              this.saveableCanvas.undo();
+            }}/>
+        </Fab>
+        <Fab 
+          color="secondary" 
+          aria-label="clear"
           style={{
             margin: 0,
             top: 'auto',
@@ -202,8 +218,8 @@ class Disegno extends React.Component {
             position: 'fixed',
           }}
           >
-            <UndoIcon onClick={() => {
-              this.saveableCanvas.undo();
+            <DeleteIcon onClick={() => {
+              this.saveableCanvas.clear();
             }}/>
         </Fab>
         </div>
