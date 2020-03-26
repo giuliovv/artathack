@@ -5,6 +5,7 @@ import * as firebase from "firebase/app";
 import 'firebaseui'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import 'firebase/analytics';
+import '@firebase/firestore'
 
 import Popup from "reactjs-popup";
 import CanvasDraw from "react-canvas-draw";
@@ -170,6 +171,27 @@ class Disegno extends React.Component {
     this.setState({ color: color.hex });
   };
 
+  getDisegno = () => {
+    let localDisegno = localStorage.getItem("arteInsiemeSalvataggio");
+    console.log(localDisegno);
+    if (localDisegno){
+      return localDisegno
+    }
+    const db = firebase.firestore();
+    let cityRef = db.collection("disegni").doc(firebase.auth().currentUser.email);
+    cityRef.get()
+      .then(doc => {
+        if (!doc.exists) {
+          return localDisegno;
+        } else {
+          return doc.data();
+        }
+      })
+      .catch(err => {
+        return localDisegno;
+      });
+  }
+
   render() {
     return (
       <div>
@@ -190,6 +212,7 @@ class Disegno extends React.Component {
               <SketchPicker
                 color={ this.state.color }
                 onChangeComplete={ this.handleChangeComplete }
+                disableAlpha={ true }
               />
             </Popup>
         </Fab>
@@ -211,6 +234,9 @@ class Disegno extends React.Component {
                 "arteInsiemeSalvataggio",
                 this.saveableCanvas.getSaveData()
               );
+              const db = firebase.firestore();
+              db.collection("disegni").doc(firebase.auth().currentUser.email).set({
+              });              
             }}/>
         </Fab>
         <Fab 
@@ -249,7 +275,7 @@ class Disegno extends React.Component {
         </Fab>
           <CanvasDraw
           ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
-          saveData={localStorage.getItem("arteInsiemeSalvataggio")}
+          saveData={this.getDisegno()}
           brushColor={this.state.color}
           style={{
             width: window.innerWidth,//"95%",
@@ -328,7 +354,6 @@ class SignInScreen extends React.Component {
     }
     return (
       <div>
-        {/* <p>Benvenuto {firebase.auth().currentUser.displayName}</p> */}
         <BottomAppBar />
         <Disegno />
       </div>
