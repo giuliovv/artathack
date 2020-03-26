@@ -183,6 +183,7 @@ class Disegno extends React.Component {
         if (doc.exists) {
           let dis_ = doc.data().disegno;
           if(dis_ !== undefined){
+            console.log(dis_);
             this.setState({ datiDisegno: dis_ }).catch(err =>{});
           }
         }
@@ -241,6 +242,7 @@ class Disegno extends React.Component {
               const db = firebase.firestore();
               db.collection("disegni").doc(firebase.auth().currentUser.email).set({
                 disegno: this.saveableCanvas.getSaveData(),
+                base64: this.saveableCanvas.canvasContainer.children[1].toDataURL(),
               });              
             }}/>
         </Fab>
@@ -280,12 +282,14 @@ class Disegno extends React.Component {
         </Fab>
           <CanvasDraw
           hideInterface={(isMobile) ? true : false}
-          ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
+          ref={canvasDraw => {
+            this.saveableCanvas = canvasDraw;
+          }}
           saveData={this.state.datiDisegno}
           brushColor={this.state.color}
           style={{
-            width: window.innerWidth,//"95%",
-            height: window.innerHeight - 65, //"100vh",
+            width: window.innerWidth,
+            height: window.innerHeight - 65,
             zIndex: -1,
             position: "absolute",
             // height: "40%"
