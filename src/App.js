@@ -25,6 +25,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AddIcon from '@material-ui/icons/Add';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import UndoIcon from '@material-ui/icons/Undo';
+import SaveIcon from '@material-ui/icons/Save';
 
 var firebaseConfig = {
   apiKey: "AIzaSyADxgU6pKy-sqxGhPHkqAoW_VqG85VsQB8",
@@ -99,9 +101,9 @@ function BottomAppBar() {
           <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={toggleDrawer("left", true)}>
             <MenuIcon />
           </IconButton>
-          <Fab color="secondary" aria-label="add" className={useStyles().fabButton}>
+          {/* <Fab color="secondary" aria-label="add" className={useStyles().fabButton}>
             <AddIcon />
-          </Fab>
+          </Fab> */}
           <div className={useStyles().grow} />
           <Avatar alt={firebase.auth().currentUser.displayName} src={firebase.auth().currentUser.photoURL} />
           <IconButton color="inherit" aria-label="logout" onClick={() => {firebase.auth().signOut()}}>
@@ -153,6 +155,60 @@ function SwipeableTemporaryDrawer(props) {
       ))}
     </div>
   );
+}
+
+class Disegno extends React.Component {
+  render() {
+    return (
+      <div>
+        <CanvasDraw
+          ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
+          saveData={localStorage.getItem("savedDrawing")}
+          style={{
+            width: "100%",
+            // height: "40%"
+            // boxShadow:
+            //   "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"
+          }}
+        />
+        <Fab 
+          color="secondary" 
+          aria-label="edit"
+          style={{
+            margin: 0,
+            top: 'auto',
+            right: 20,
+            bottom: 140,
+            left: 'auto',
+            position: 'fixed',
+          }}
+          >
+            <SaveIcon onClick={() => {
+              localStorage.setItem(
+                "savedDrawing",
+                this.saveableCanvas.getSaveData()
+              );
+            }}/>
+        </Fab>
+        <Fab 
+          color="secondary" 
+          aria-label="edit"
+          style={{
+            margin: 0,
+            top: 'auto',
+            right: 20,
+            bottom: 80,
+            left: 'auto',
+            position: 'fixed',
+          }}
+          >
+            <UndoIcon onClick={() => {
+              this.saveableCanvas.undo();
+            }}/>
+        </Fab>
+        </div>
+    );
+  }
 }
 
 
@@ -219,14 +275,7 @@ class SignInScreen extends React.Component {
       <div>
         <p>Benvenuto {firebase.auth().currentUser.displayName}</p>
         <BottomAppBar />
-        <CanvasDraw
-          style={{
-            width: "100%",
-            // height: "40%"
-            // boxShadow:
-            //   "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"
-          }}
-        />
+        <Disegno />
       </div>
     );
   }
