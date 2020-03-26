@@ -161,21 +161,12 @@ class Disegno extends React.Component {
   render() {
     return (
       <div>
-        <CanvasDraw
-          ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
-          saveData={localStorage.getItem("savedDrawing")}
-          style={{
-            width: "100%",
-            // height: "40%"
-            // boxShadow:
-            //   "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"
-          }}
-        />
         <Fab 
           color="secondary" 
           aria-label="save"
           style={{
             margin: 0,
+            zIndex: 1,
             top: 'auto',
             right: 20,
             bottom: 200,
@@ -195,7 +186,8 @@ class Disegno extends React.Component {
           aria-label="undo"
           style={{
             margin: 0,
-            top: 'auto',
+            zIndex: 1,
+            // top: 'auto',
             right: 20,
             bottom: 140,
             left: 'auto',
@@ -211,6 +203,7 @@ class Disegno extends React.Component {
           aria-label="clear"
           style={{
             margin: 0,
+            zIndex: 1,
             top: 'auto',
             right: 20,
             bottom: 80,
@@ -222,6 +215,18 @@ class Disegno extends React.Component {
               this.saveableCanvas.clear();
             }}/>
         </Fab>
+        <CanvasDraw
+          ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
+          saveData={localStorage.getItem("savedDrawing")}
+          style={{
+            width: window.innerWidth - 100,//"95%",
+            height: window.innerHeight - 70, //"100vh",
+            zIndex: -1,
+            // height: "40%"
+            // boxShadow:
+            //   "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"
+          }}
+        />
         </div>
     );
   }
@@ -289,7 +294,7 @@ class SignInScreen extends React.Component {
     }
     return (
       <div>
-        <p>Benvenuto {firebase.auth().currentUser.displayName}</p>
+        {/* <p>Benvenuto {firebase.auth().currentUser.displayName}</p> */}
         <BottomAppBar />
         <Disegno />
       </div>
