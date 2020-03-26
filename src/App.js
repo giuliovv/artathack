@@ -6,6 +6,8 @@ import 'firebaseui'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import 'firebase/analytics';
 
+import CanvasDraw from "react-canvas-draw";
+
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
 import clsx from 'clsx';
@@ -215,9 +217,16 @@ class SignInScreen extends React.Component {
     }
     return (
       <div>
-        <BottomAppBar />
-        <h1>Home</h1>
         <p>Benvenuto {firebase.auth().currentUser.displayName}</p>
+        <BottomAppBar />
+        <CanvasDraw
+          style={{
+            width: "100%",
+            // height: "40%"
+            // boxShadow:
+            //   "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"
+          }}
+        />
       </div>
     );
   }
