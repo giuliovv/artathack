@@ -7,6 +7,8 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import 'firebase/analytics';
 import '@firebase/firestore'
 
+import { geolocated } from "react-geolocated";
+
 import Popup from "reactjs-popup";
 import CanvasDraw from "react-canvas-draw";
 import { SketchPicker } from 'react-color';
@@ -162,6 +164,22 @@ function SwipeableTemporaryDrawer(props) {
   );
 }
 
+function LocationOk(props){
+  if (! props.isGeolocationAvailable){
+    return <Typography color="textPrimary">
+      La posizione non è disponibile :(
+      </Typography>
+  }
+  if (! props.isGeolocationEnabled){
+    return <Typography color="textPrimary">
+      Per favore abilita il GPS per salvare.
+      </Typography>
+  }
+  return <Typography color="textPrimary">
+      Salvataggio completato.
+      </Typography>
+}
+
 class Disegno extends React.Component {
 
   state = {
@@ -183,7 +201,6 @@ class Disegno extends React.Component {
         if (doc.exists) {
           let dis_ = doc.data().disegno;
           if(dis_ !== undefined){
-            console.log(dis_);
             this.setState({ datiDisegno: dis_ }).catch(err =>{});
           }
         }
@@ -234,17 +251,29 @@ class Disegno extends React.Component {
             position: 'fixed',
           }}
           >
+            <Popup trigger={
             <SaveIcon onClick={() => {
-              localStorage.setItem(
-                "arteInsiemeSalvataggio",
-                this.saveableCanvas.getSaveData()
-              );
-              const db = firebase.firestore();
-              db.collection("disegni").doc(firebase.auth().currentUser.email).set({
-                disegno: this.saveableCanvas.getSaveData(),
-                base64: this.saveableCanvas.canvasContainer.children[1].toDataURL(),
-              });              
-            }}/>
+              if (this.props.isGeolocationAvailable && this.props.isGeolocationEnabled){
+                localStorage.setItem(
+                  "arteInsiemeSalvataggio",
+                  this.saveableCanvas.getSaveData()
+                );
+                const db = firebase.firestore();
+                db.collection("disegni").doc(firebase.auth().currentUser.email).set({
+                  disegno: this.saveableCanvas.getSaveData(),
+                  base64: this.saveableCanvas.canvasContainer.children[1].toDataURL(),
+                  lat: this.props.coords.latitude,
+                  lon: this.props.coords.longitude
+                });       
+              }       
+            }}
+            />} 
+            position="left center">
+            <LocationOk 
+            isGeolocationAvailable={this.props.isGeolocationAvailable}
+            isGeolocationEnabled={this.props.isGeolocationEnabled}
+            />
+          </Popup>
         </Fab>
         <Fab 
           color="secondary" 
@@ -365,18 +394,31 @@ class SignInScreen extends React.Component {
     return (
       <div>
         <BottomAppBar />
-        <Disegno />
+        <Disegno 
+        isGeolocationAvailable={this.props.isGeolocationAvailable} 
+        isGeolocationEnabled={this.props.isGeolocationEnabled}
+        coords={this.props.coords}
+        />
       </div>
     );
   }
 }
 
-function App() {
+function App(props) {
   return (
       <div>
-        <SignInScreen />
+        <SignInScreen 
+        isGeolocationAvailable={props.isGeolocationAvailable} 
+        isGeolocationEnabled={props.isGeolocationEnabled}
+        coords={props.coords}
+        />
       </div>
     );
 }
 
-export default App;
+export default geolocated({
+  positionOptions: {
+      enableHighAccuracy: true,
+  },
+  userDecisionTimeout: 5000,
+})(App);
