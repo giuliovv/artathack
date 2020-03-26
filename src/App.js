@@ -175,6 +175,19 @@ function LocationOk(props){
       Per favore abilita il GPS per salvare.
       </Typography>
   }
+  if (props.isGeolocationAvailable && props.isGeolocationEnabled){
+    localStorage.setItem(
+      "arteInsiemeSalvataggio",
+      props.saveableCanvas.getSaveData()
+    );
+    const db = firebase.firestore();
+    db.collection("disegni").doc(firebase.auth().currentUser.email).set({
+      disegno: props.saveableCanvas.getSaveData(),
+      base64: props.saveableCanvas.canvasContainer.children[1].toDataURL(),
+      lat: props.coords.latitude,
+      lon: props.coords.longitude
+    });       
+  } 
   return <Typography color="textPrimary">
       Salvataggio completato.
       </Typography>
@@ -252,26 +265,13 @@ class Disegno extends React.Component {
           }}
           >
             <Popup trigger={
-            <SaveIcon onClick={() => {
-              if (this.props.isGeolocationAvailable && this.props.isGeolocationEnabled){
-                localStorage.setItem(
-                  "arteInsiemeSalvataggio",
-                  this.saveableCanvas.getSaveData()
-                );
-                const db = firebase.firestore();
-                db.collection("disegni").doc(firebase.auth().currentUser.email).set({
-                  disegno: this.saveableCanvas.getSaveData(),
-                  base64: this.saveableCanvas.canvasContainer.children[1].toDataURL(),
-                  lat: this.props.coords.latitude,
-                  lon: this.props.coords.longitude
-                });       
-              }       
-            }}
-            />} 
+            <SaveIcon />} 
             position="left center">
             <LocationOk 
             isGeolocationAvailable={this.props.isGeolocationAvailable}
             isGeolocationEnabled={this.props.isGeolocationEnabled}
+            coords={this.props.coords}
+            saveableCanvas={this.saveableCanvas}
             />
           </Popup>
         </Fab>
@@ -418,7 +418,8 @@ function App(props) {
 
 export default geolocated({
   positionOptions: {
-      enableHighAccuracy: true,
+      enableHighAccuracy: false,
   },
+  watchPosition: true,
   userDecisionTimeout: 5000,
 })(App);
