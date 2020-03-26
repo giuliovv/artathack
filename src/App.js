@@ -10,6 +10,7 @@ import '@firebase/firestore'
 import Popup from "reactjs-popup";
 import CanvasDraw from "react-canvas-draw";
 import { SketchPicker } from 'react-color';
+import { isMobile } from "react-device-detect";
 
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
@@ -278,6 +279,7 @@ class Disegno extends React.Component {
             }}/>
         </Fab>
           <CanvasDraw
+          hideInterface={(isMobile) ? true : false}
           ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
           saveData={this.state.datiDisegno}
           brushColor={this.state.color}

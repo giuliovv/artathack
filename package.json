@@ -16,6 +16,7 @@
     "react": "^16.13.1",
     "react-canvas-draw": "^1.1.0",
     "react-color": "^2.18.0",
+    "react-device-detect": "^1.11.14",
     "react-dom": "^16.13.1",
     "react-firebaseui": "^4.1.0",
     "react-scripts": "3.4.1",
