@@ -189,7 +189,10 @@ class Disegno extends React.Component {
           if (!doc.exists) {
             this.setState({ datiDisegno: localDisegno })
           } else {
-            this.setState({ datiDisegno: doc.data().disegno })
+            this.setState({ datiDisegno: doc.data().disegno }).catch(err =>{
+              this.setState({ datiDisegno: localDisegno })
+              }
+            )
             localStorage.setItem(
               "arteInsiemeSalvataggio",
               doc.data().disegno
