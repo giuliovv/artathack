@@ -186,22 +186,20 @@ class Disegno extends React.Component {
       let cityRef = db.collection("disegni").doc(firebase.auth().currentUser.email);
       cityRef.get()
         .then(doc => {
-          if (!doc.exists) {
-            this.setState({ datiDisegno: localDisegno })
-          } else {
-            this.setState({ datiDisegno: doc.data().disegno }).catch(err =>{
-              this.setState({ datiDisegno: localDisegno })
-              }
-            )
-            localStorage.setItem(
-              "arteInsiemeSalvataggio",
-              doc.data().disegno
-            );
+          if (doc.exists) {
+            let dis_ = doc.data().disegno;
+            console.log("ITSAMEMARIO");
+            console.log(dis_)
+            if(dis_ !== undefined){
+              this.setState({ datiDisegno: dis_ }).catch(err =>{});
+              localStorage.setItem(
+                "arteInsiemeSalvataggio",
+                dis_
+              );
+            }
           }
         })
-        .catch(err => {
-          this.setState({ datiDisegno: localDisegno })
-        });
+        .catch(err => {});
       }
   }
 
