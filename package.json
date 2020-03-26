@@ -14,9 +14,11 @@
     "gh-pages": "^2.2.0",
     "react": "^16.13.1",
     "react-canvas-draw": "^1.1.0",
+    "react-color": "^2.18.0",
     "react-dom": "^16.13.1",
     "react-firebaseui": "^4.1.0",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "reactjs-popup": "^1.5.0"
   },
   "scripts": {
     "start": "react-scripts start",

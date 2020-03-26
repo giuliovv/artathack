@@ -6,7 +6,9 @@ import 'firebaseui'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import 'firebase/analytics';
 
+import Popup from "reactjs-popup";
 import CanvasDraw from "react-canvas-draw";
+import { SketchPicker } from 'react-color';
 
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
@@ -21,6 +23,7 @@ import Typography from '@material-ui/core/Typography';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import { makeStyles } from '@material-ui/core/styles';
 
+import ColorizeIcon from '@material-ui/icons/Colorize';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -158,9 +161,38 @@ function SwipeableTemporaryDrawer(props) {
 }
 
 class Disegno extends React.Component {
+
+  state = {
+    color: "#444",
+  };
+
+  handleChangeComplete = (color, event) => {
+    this.setState({ color: color.hex });
+  };
+
   render() {
     return (
       <div>
+        <Fab 
+          color="secondary" 
+          aria-label="colore"
+          style={{
+            margin: 0,
+            zIndex: 1,
+            top: 'auto',
+            right: 20,
+            bottom: 260,
+            left: 'auto',
+            position: 'fixed',
+          }}
+          >
+            <Popup trigger={<ColorizeIcon />} position="left center">
+              <SketchPicker
+                color={ this.state.color }
+                onChangeComplete={ this.handleChangeComplete }
+              />
+            </Popup>
+        </Fab>
         <Fab 
           color="secondary" 
           aria-label="save"
@@ -176,7 +208,7 @@ class Disegno extends React.Component {
           >
             <SaveIcon onClick={() => {
               localStorage.setItem(
-                "savedDrawing",
+                "arteInsiemeSalvataggio",
                 this.saveableCanvas.getSaveData()
               );
             }}/>
@@ -215,19 +247,21 @@ class Disegno extends React.Component {
               this.saveableCanvas.clear();
             }}/>
         </Fab>
-        <CanvasDraw
+          <CanvasDraw
           ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
-          saveData={localStorage.getItem("savedDrawing")}
+          saveData={localStorage.getItem("arteInsiemeSalvataggio")}
+          brushColor={this.state.color}
           style={{
-            width: window.innerWidth - 80,//"95%",
+            width: window.innerWidth,//"95%",
             height: window.innerHeight - 65, //"100vh",
             zIndex: -1,
+            position: "absolute",
             // height: "40%"
             // boxShadow:
             //   "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"
           }}
-        />
-        </div>
+          />
+      </div>
     );
   }
 }
