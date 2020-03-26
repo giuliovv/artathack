@@ -219,8 +219,8 @@ class Disegno extends React.Component {
           ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
           saveData={localStorage.getItem("savedDrawing")}
           style={{
-            width: window.innerWidth - 100,//"95%",
-            height: window.innerHeight - 70, //"100vh",
+            width: window.innerWidth - 80,//"95%",
+            height: window.innerHeight - 65, //"100vh",
             zIndex: -1,
             // height: "40%"
             // boxShadow:
