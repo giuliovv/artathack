@@ -202,7 +202,7 @@ class SignInScreen extends React.Component {
 
             <Grid item xs={12}>
               <Typography variant="h1" component="h2">
-              la spesa
+              Arte tutti insieme
               </Typography>
             </Grid>  
             <Grid item xs={12}>
