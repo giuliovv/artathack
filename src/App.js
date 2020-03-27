@@ -220,7 +220,7 @@ class Disegno extends React.Component {
             position: 'fixed',
           }}
           >
-            <Popup trigger={<ColorizeIcon />} position="left center">
+            <Popup trigger={<ColorizeIcon style={{ color: "white" }}/>} position="left center">
               <SketchPicker
                 color={ this.state.color }
                 onChangeComplete={ this.handleChangeComplete }
@@ -242,7 +242,7 @@ class Disegno extends React.Component {
           }}
           >
             <Popup trigger={
-            <SaveIcon />} 
+            <SaveIcon style={{ color: "white" }}/>} 
             position="left center">
             <LocationOk 
             isGeolocationAvailable={this.props.isGeolocationAvailable}
@@ -267,7 +267,8 @@ class Disegno extends React.Component {
           >
             <UndoIcon onClick={() => {
               this.saveableCanvas.undo();
-            }}/>
+            }}
+            style={{ color: "white" }}/>
         </Fab>
         <Fab 
           color="secondary" 
@@ -284,7 +285,7 @@ class Disegno extends React.Component {
           >
             <DeleteIcon onClick={() => {
               this.saveableCanvas.clear();
-            }}/>
+            }} style={{ color: "white" }}/>
         </Fab>
           <CanvasDraw
           hideInterface={(isMobile) ? true : false}
