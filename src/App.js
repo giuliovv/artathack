@@ -17,24 +17,20 @@ import { isMobile } from "react-device-detect";
 
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
-import clsx from 'clsx';
-import Divider from '@material-ui/core/Divider';
+import { createMuiTheme } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ColorizeIcon from '@material-ui/icons/Colorize';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import UndoIcon from '@material-ui/icons/Undo';
 import SaveIcon from '@material-ui/icons/Save';
+import ImageIcon from '@material-ui/icons/Image';
 
 var firebaseConfig = {
   apiKey: "AIzaSyADxgU6pKy-sqxGhPHkqAoW_VqG85VsQB8",
@@ -92,23 +88,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function BottomAppBar() {
-  const [state, setState] = React.useState({
-    left: false,
-  });
-  const toggleDrawer = (anchor, open) => event => {
-    if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
-
-    setState({ ...state, [anchor]: open });
-  };
+function BottomAppBar(props) {
   return (
     <AppBar position="fixed" color="primary" className={useStyles().appBar}>
-      <SwipeableTemporaryDrawer state={state} setState={setState} toggleDrawer={toggleDrawer}/>
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={toggleDrawer("left", true)}>
-            <MenuIcon />
+          <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={() => {props.handleChange()}}>
+            <ImageIcon />
           </IconButton>
           <div className={useStyles().grow} />
           <Avatar alt={firebase.auth().currentUser.displayName} src={firebase.auth().currentUser.photoURL} />
@@ -118,49 +103,6 @@ function BottomAppBar() {
         </Toolbar>
       </AppBar>
   )
-}
-
-function SwipeableTemporaryDrawer(props) {
-  const classes = useStyles();
-  let state = props.state;
-  let toggleDrawer = props.toggleDrawer;
-
-  const list = anchor => (
-    <div
-      className={clsx(classes.list, {
-        [classes.fullList]: anchor === 'top' || anchor === 'bottom',
-      })}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        <ListItem>
-          <div className={classes.root}>
-            <Avatar alt={firebase.auth().currentUser.displayName} src={firebase.auth().currentUser.photoURL} />
-          </div>
-        </ListItem>
-      </List>
-      <Divider />
-    </div>
-  );
-
-  return (
-    <div>
-      {['left'].map(anchor => (
-        <React.Fragment key={anchor}>
-          <SwipeableDrawer
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-            onOpen={toggleDrawer(anchor, true)}
-          >
-            {list(anchor)}
-          </SwipeableDrawer>
-        </React.Fragment>
-      ))}
-    </div>
-  );
 }
 
 function LocationOk(props){
@@ -193,6 +135,12 @@ function LocationOk(props){
       </Typography>
 }
 
+class VistaDisegni extends React.Component {
+  render() {
+    return <p>CIAONE</p>
+  }
+}
+
 class Disegno extends React.Component {
 
   state = {
@@ -213,7 +161,6 @@ class Disegno extends React.Component {
       .then(doc => {
         if (doc.exists) {
           let dis_ = doc.data().d.disegno;
-          console.log(dis_);
           if(dis_ !== undefined){
             this.setState({ datiDisegno: dis_ }).catch(err =>{});
           }
@@ -229,6 +176,9 @@ class Disegno extends React.Component {
 }
 
   render() {
+    if (this.props.vistaDisegni){
+      return (<VistaDisegni />)
+    }
     return (
       <div>
         <Fab 
@@ -337,7 +287,7 @@ class SignInScreen extends React.Component {
 
   // The component's Local state.
   state = {
-    isSignedIn: false // Local signed-in state.
+    isSignedIn: false, // Local signed-in state.
   };
 
   // Configure FirebaseUI.
@@ -365,6 +315,10 @@ class SignInScreen extends React.Component {
   componentWillUnmount() {
     this.unregisterAuthObserver();
   }
+
+  handleChange = () => {
+    this.setState({vistaDisegni: !this.state.vistaDisegni});
+  };
 
   render() {
     if (!this.state.isSignedIn) {
@@ -394,11 +348,15 @@ class SignInScreen extends React.Component {
     }
     return (
       <div>
-        <BottomAppBar />
+        <BottomAppBar 
+        vistaDisegni={this.state.vistaDisegni}
+        handleChange={this.handleChange}
+        />
         <Disegno 
         isGeolocationAvailable={this.props.isGeolocationAvailable} 
         isGeolocationEnabled={this.props.isGeolocationEnabled}
         coords={this.props.coords}
+        vistaDisegni={this.state.vistaDisegni}
         />
       </div>
     );
