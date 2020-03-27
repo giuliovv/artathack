@@ -179,18 +179,14 @@ function LocationOk(props){
       "arteInsiemeSalvataggio",
       props.saveableCanvas.getSaveData()
     );
-    const db = firebase.firestore();
-    GeoFirestore(db).collection('disegni').doc(firebase.auth().currentUser.email).set({
+    const firestore = firebase.firestore();
+    const geoFirestore = new GeoFirestore(firestore);
+    const geoCollectionRef = geoFirestore.collection('disegni');
+    geoCollectionRef.doc(firebase.auth().currentUser.email).set({
       disegno: props.saveableCanvas.getSaveData(),
       base64: props.saveableCanvas.canvasContainer.children[1].toDataURL(),
-      coordinates: firebase.firestore.GeoPoint(props.coords.latitude, props.coords.longitude),
-    });    
-    // db.collection("disegni").doc(firebase.auth().currentUser.email).set({
-    //   disegno: props.saveableCanvas.getSaveData(),
-    //   base64: props.saveableCanvas.canvasContainer.children[1].toDataURL(),
-    //   lat: props.coords.latitude,
-    //   lon: props.coords.longitude
-    // });    
+      coordinates: new firebase.firestore.GeoPoint(props.coords.latitude, props.coords.longitude),
+    });
   } 
   return <Typography color="textPrimary">
       Salvataggio completato.
@@ -216,7 +212,8 @@ class Disegno extends React.Component {
     cityRef.get()
       .then(doc => {
         if (doc.exists) {
-          let dis_ = doc.data().disegno;
+          let dis_ = doc.data().d.disegno;
+          console.log(dis_);
           if(dis_ !== undefined){
             this.setState({ datiDisegno: dis_ }).catch(err =>{});
           }
