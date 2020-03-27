@@ -329,7 +329,7 @@ function Footer(){
           Sponsorizzato da:
         </Typography>
       <IconButton>
-          <Button color="secondary" onClick={() => window.open("https://www.morocolor.it/")}>Morocolor</Button>
+          <Button color="secondary" onClick={() => window.open("https://www.morocolor.it/")}>Primo</Button>
         </IconButton>
       </Toolbar>
     </AppBar>
