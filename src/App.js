@@ -158,23 +158,31 @@ function LocationOk(props){
     disegno: props.saveableCanvas.getSaveData(),
     base64: props.saveableCanvas.canvasContainer.children[1].toDataURL(),
     coordinates: new firebase.firestore.GeoPoint(latitude, longitude),
+    timestamp: + new Date(),
   });
   return <Typography color="textPrimary" style={{"textTransform": "lowercase"}}>
       {testo}
       </Typography>
 }
 
-class VistaDisegni extends React.Component {
-  render() {
-    const geofirestore = new GeoFirestore(firebase.firestore());
-    if (this.props.isGeolocationAvailable && this.props.isGeolocationEnabled){
-      geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(this.props.coords.latitude, this.props.coords.longitude), radius: 1000 });
-    }
-    else {
-      geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(puntoSpeciale[0], puntoSpeciale[1]), radius: 1000 });
-    }
-    return <p>CIAONE</p>
-  }
+function VistaDisegni (props) {
+  const db = firebase.firestore();
+  // const geofirestore = new GeoFirestore(firebase.firestore());
+  // var query;
+  // if (props.isGeolocationAvailable && props.isGeolocationEnabled && props.coords != null){
+  //   query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(props.coords.latitude, props.coords.longitude), radius: 1000 });
+  // }
+  // else {
+  //   query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(puntoSpeciale[0], puntoSpeciale[1]), radius: 1000 });
+  // }
+  // query.get().then((value) => {
+  //   value.docs.map((v) => console.log(v.data().base64));
+  //   console.log(value.docs);
+  // });
+  db.collection('disegni').orderBy("timestamp").limit(20).get().then(doc =>
+    console.log(doc),
+  )
+  return <p>CIAONE</p>
 }
 
 class Disegno extends React.Component {
