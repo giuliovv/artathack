@@ -64,6 +64,7 @@ let theme = createMuiTheme({
     h1: {
       color: "#f5cf2d"
     },
+    fontFamily: "'Baloo Da 2', cursive",
   }
 });
 theme = responsiveFontSizes(theme);
