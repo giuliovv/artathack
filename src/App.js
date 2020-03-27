@@ -108,9 +108,6 @@ function BottomAppBar() {
           <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={toggleDrawer("left", true)}>
             <MenuIcon />
           </IconButton>
-          {/* <Fab color="secondary" aria-label="add" className={useStyles().fabButton}>
-            <AddIcon />
-          </Fab> */}
           <div className={useStyles().grow} />
           <Avatar alt={firebase.auth().currentUser.displayName} src={firebase.auth().currentUser.photoURL} />
           <IconButton color="inherit" aria-label="logout" onClick={() => {firebase.auth().signOut()}}>
@@ -166,16 +163,16 @@ function SwipeableTemporaryDrawer(props) {
 
 function LocationOk(props){
   if (! props.isGeolocationAvailable){
-    return <Typography color="textPrimary">
+    return <Typography color="textPrimary" style={{"text-transform": "lowercase"}}>
       La posizione non è disponibile :(
       </Typography>
   }
   if (! props.isGeolocationEnabled){
-    return <Typography color="textPrimary">
+    return <Typography color="textPrimary" style={{"text-transform": "lowercase"}}>
       Per favore abilita il GPS per salvare.
       </Typography>
   }
-  if (props.isGeolocationAvailable && props.isGeolocationEnabled){
+  if (props.isGeolocationAvailable && props.isGeolocationEnabled && props.coords != null){
     localStorage.setItem(
       "arteInsiemeSalvataggio",
       props.saveableCanvas.getSaveData()
