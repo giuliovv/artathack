@@ -17,6 +17,7 @@ import { isMobile } from "react-device-detect";
 
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -62,7 +63,7 @@ let theme = createMuiTheme({
     },
     h1: {
       color: "#f5cf2d"
-    }
+    },
   }
 });
 theme = responsiveFontSizes(theme);
@@ -98,6 +99,11 @@ const useStyles = makeStyles(theme => ({
   },
   fullList: {
     width: 'auto',
+  },
+  footer: {
+    top: 'auto',
+    bottom: 0,
+    shadows: ["none"],
   },
   root: {
     display: 'flex',
@@ -301,6 +307,18 @@ class Disegno extends React.Component {
   }
 }
 
+function Footer(){
+  return (
+    <AppBar position="fixed" color="primary" className={useStyles().footer} elevation={0}>
+      <Toolbar>
+        <div className={useStyles().grow} />
+        <IconButton>
+          <Button color="inherit" onClick={() => window.open("https://www.privacypolicygenerator.info/live.php?token=bOaq2FxZvBZ3mJY3PESMHOe27PREKKjp")}>Privacy policy</Button>
+        </IconButton>
+      </Toolbar>
+    </AppBar>
+  )
+}
 
 class SignInScreen extends React.Component {
 
@@ -342,27 +360,32 @@ class SignInScreen extends React.Component {
   render() {
     if (!this.state.isSignedIn) {
       return (
-        <div style={{backgroundColor: "#315190"}}>
-          <Grid
-            container
-            spacing={5}
-            direction="column"
-            alignItems="center"
-            justify="center"
-            style={{ minHeight: '100vh' }}
-          >
+        <div>
+          <div 
+          style={{
+            backgroundColor: "#315190",
+            }}>
+            <Grid
+              container
+              spacing={5}
+              direction="column"
+              alignItems="center"
+              justify="center"
+              style={{ minHeight: '100vh' }}
+            >
 
-            <Grid item xs={12}>
-              <Typography variant="h1" component="h2">
-              Art@Hack
-              </Typography>
-            </Grid>  
-            <Grid item xs={12}>
-            <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>
-            </Grid>   
-          </Grid>
-          
-        </div>
+              <Grid item xs={12}>
+                <Typography variant="h1" component="h2">
+                Art@Hack
+                </Typography>
+              </Grid>  
+              <Grid item xs={12}>
+              <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>
+              </Grid>   
+            </Grid>
+          </div>
+          <Footer/>
+      </div>
       );
     }
     return (
@@ -385,13 +408,13 @@ class SignInScreen extends React.Component {
 function App(props) {
   return (
       <div>
-        <ThemeProvider theme={theme}>
-          <SignInScreen 
-          isGeolocationAvailable={props.isGeolocationAvailable} 
-          isGeolocationEnabled={props.isGeolocationEnabled}
-          coords={props.coords}
-          />
-        </ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <SignInScreen 
+            isGeolocationAvailable={props.isGeolocationAvailable} 
+            isGeolocationEnabled={props.isGeolocationEnabled}
+            coords={props.coords}
+            />
+          </ThemeProvider>
       </div>
     );
 }
