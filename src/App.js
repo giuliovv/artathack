@@ -32,6 +32,8 @@ import UndoIcon from '@material-ui/icons/Undo';
 import SaveIcon from '@material-ui/icons/Save';
 import ImageIcon from '@material-ui/icons/Image';
 
+const puntoSpeciale = [45.4642, 9.1900];
+
 var firebaseConfig = {
   apiKey: "AIzaSyADxgU6pKy-sqxGhPHkqAoW_VqG85VsQB8",
   authDomain: "spesa-2de52.firebaseapp.com",
@@ -132,32 +134,33 @@ function BottomAppBar(props) {
 }
 
 function LocationOk(props){
-  if (! props.isGeolocationAvailable){
-    return <Typography color="textPrimary" style={{"text-transform": "lowercase"}}>
-      La posizione non è disponibile :(
-      </Typography>
+  let testo = "Salvataggio completato."
+  let latitude, longitude;
+  if (! props.isGeolocationAvailable || ! props.isGeolocationEnabled){
+    testo = "Salvataggio completato, abilita il gps per salvare il disegno nella tua posizione sul murales."
   }
-  if (! props.isGeolocationEnabled){
-    return <Typography color="textPrimary" style={{"text-transform": "lowercase"}}>
-      Per favore abilita il GPS per salvare.
-      </Typography>
+  if (props.coords == null){
+    latitude = puntoSpeciale[0];
+    longitude = puntoSpeciale[1];
   }
-  if (props.isGeolocationAvailable && props.isGeolocationEnabled && props.coords != null){
-    localStorage.setItem(
-      "arteInsiemeSalvataggio",
-      props.saveableCanvas.getSaveData()
-    );
-    const firestore = firebase.firestore();
-    const geoFirestore = new GeoFirestore(firestore);
-    const geoCollectionRef = geoFirestore.collection('disegni');
-    geoCollectionRef.doc(firebase.auth().currentUser.email).set({
-      disegno: props.saveableCanvas.getSaveData(),
-      base64: props.saveableCanvas.canvasContainer.children[1].toDataURL(),
-      coordinates: new firebase.firestore.GeoPoint(props.coords.latitude, props.coords.longitude),
-    });
-  } 
-  return <Typography color="textPrimary">
-      Salvataggio completato.
+  else {
+    latitude = props.coords.latitude;
+    longitude = props.coords.longitude;
+  }
+  localStorage.setItem(
+    "arteInsiemeSalvataggio",
+    props.saveableCanvas.getSaveData()
+  );
+  const firestore = firebase.firestore();
+  const geoFirestore = new GeoFirestore(firestore);
+  const geoCollectionRef = geoFirestore.collection('disegni');
+  geoCollectionRef.doc(firebase.auth().currentUser.email).set({
+    disegno: props.saveableCanvas.getSaveData(),
+    base64: props.saveableCanvas.canvasContainer.children[1].toDataURL(),
+    coordinates: new firebase.firestore.GeoPoint(latitude, longitude),
+  });
+  return <Typography color="textPrimary" style={{"textTransform": "lowercase"}}>
+      {testo}
       </Typography>
 }
 
@@ -168,7 +171,7 @@ class VistaDisegni extends React.Component {
       geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(this.props.coords.latitude, this.props.coords.longitude), radius: 1000 });
     }
     else {
-      geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(this.props.coords.latitude, this.props.coords.longitude), radius: 1000 });
+      geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(puntoSpeciale[0], puntoSpeciale[1]), radius: 1000 });
     }
     return <p>CIAONE</p>
   }
