@@ -52,17 +52,17 @@ let theme = createMuiTheme({
       default: "#315190"
     },
     primary: { main: '#315190' },
-    secondary: { main: '#349f3a' },
+    secondary: { main: '#40bd47' },
   },
   status: {
     danger: 'orange',
   },
   typography: {
     h2: {
-      color: "#f5cf2d"
+      color: "#fed111"
     },
     h1: {
-      color: "#f5cf2d"
+      color: "#fed111"
     },
     fontFamily: "'Baloo Da 2', cursive",
   }
