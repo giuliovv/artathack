@@ -163,6 +163,13 @@ function LocationOk(props){
 
 class VistaDisegni extends React.Component {
   render() {
+    const geofirestore = new GeoFirestore(firebase.firestore());
+    if (this.props.isGeolocationAvailable && this.props.isGeolocationEnabled){
+      geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(this.props.coords.latitude, this.props.coords.longitude), radius: 1000 });
+    }
+    else {
+      geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(this.props.coords.latitude, this.props.coords.longitude), radius: 1000 });
+    }
     return <p>CIAONE</p>
   }
 }
@@ -203,7 +210,11 @@ class Disegno extends React.Component {
 
   render() {
     if (this.props.vistaDisegni){
-      return (<VistaDisegni />)
+      return (<VistaDisegni 
+            isGeolocationAvailable={this.props.isGeolocationAvailable}
+            isGeolocationEnabled={this.props.isGeolocationEnabled}
+            coords={this.props.coords}
+      />)
     }
     return (
       <div>
@@ -299,9 +310,6 @@ class Disegno extends React.Component {
             height: window.innerHeight - 65,
             zIndex: -1,
             position: "absolute",
-            // height: "40%"
-            // boxShadow:
-            //   "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"
           }}
           />
       </div>
@@ -313,9 +321,15 @@ function Footer(){
   return (
     <AppBar position="fixed" color="primary" className={useStyles().footer} elevation={0}>
       <Toolbar>
-        <div className={useStyles().grow} />
-        <IconButton>
+      <IconButton>
           <Button color="inherit" onClick={() => window.open("https://www.privacypolicygenerator.info/live.php?token=bOaq2FxZvBZ3mJY3PESMHOe27PREKKjp")}>Privacy policy</Button>
+        </IconButton>
+        <div className={useStyles().grow} />
+        <Typography>
+          Sponsorizzato da:
+        </Typography>
+      <IconButton>
+          <Button color="secondary" onClick={() => window.open("https://www.morocolor.it/")}>Morocolor</Button>
         </IconButton>
       </Toolbar>
     </AppBar>
