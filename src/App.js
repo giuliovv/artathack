@@ -17,12 +17,11 @@ import { isMobile } from "react-device-detect";
 
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
-import { createMuiTheme } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { createMuiTheme, makeStyles, ThemeProvider, responsiveFontSizes } from '@material-ui/core/styles';
 
 import ColorizeIcon from '@material-ui/icons/Colorize';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -46,7 +45,27 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
-
+let theme = createMuiTheme({
+  palette: {
+    background: {
+      default: "#315190"
+    },
+    primary: { main: '#315190' },
+    secondary: { main: '#349f3a' },
+  },
+  status: {
+    danger: 'orange',
+  },
+  typography: {
+    h2: {
+      color: "#f5cf2d"
+    },
+    h1: {
+      color: "#f5cf2d"
+    }
+  }
+});
+theme = responsiveFontSizes(theme);
 
 const useStyles = makeStyles(theme => ({
   text: {
@@ -323,7 +342,7 @@ class SignInScreen extends React.Component {
   render() {
     if (!this.state.isSignedIn) {
       return (
-        <div>
+        <div style={{backgroundColor: "#315190"}}>
           <Grid
             container
             spacing={5}
@@ -366,11 +385,13 @@ class SignInScreen extends React.Component {
 function App(props) {
   return (
       <div>
-        <SignInScreen 
-        isGeolocationAvailable={props.isGeolocationAvailable} 
-        isGeolocationEnabled={props.isGeolocationEnabled}
-        coords={props.coords}
-        />
+        <ThemeProvider theme={theme}>
+          <SignInScreen 
+          isGeolocationAvailable={props.isGeolocationAvailable} 
+          isGeolocationEnabled={props.isGeolocationEnabled}
+          coords={props.coords}
+          />
+        </ThemeProvider>
       </div>
     );
 }
