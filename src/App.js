@@ -6,6 +6,7 @@ import 'firebaseui'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import 'firebase/analytics';
 import '@firebase/firestore'
+import { GeoCollectionReference, GeoFirestore, GeoQuery, GeoQuerySnapshot } from 'geofirestore';
 
 import { geolocated } from "react-geolocated";
 
@@ -48,6 +49,7 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -178,12 +180,17 @@ function LocationOk(props){
       props.saveableCanvas.getSaveData()
     );
     const db = firebase.firestore();
-    db.collection("disegni").doc(firebase.auth().currentUser.email).set({
+    GeoFirestore(db).collection('disegni').doc(firebase.auth().currentUser.email).set({
       disegno: props.saveableCanvas.getSaveData(),
       base64: props.saveableCanvas.canvasContainer.children[1].toDataURL(),
-      lat: props.coords.latitude,
-      lon: props.coords.longitude
-    });       
+      coordinates: firebase.firestore.GeoPoint(props.coords.latitude, props.coords.longitude),
+    });    
+    // db.collection("disegni").doc(firebase.auth().currentUser.email).set({
+    //   disegno: props.saveableCanvas.getSaveData(),
+    //   base64: props.saveableCanvas.canvasContainer.children[1].toDataURL(),
+    //   lat: props.coords.latitude,
+    //   lon: props.coords.longitude
+    // });    
   } 
   return <Typography color="textPrimary">
       Salvataggio completato.
