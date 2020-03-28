@@ -20,6 +20,8 @@ import { isMobile } from "react-device-detect";
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import CardMedia from '@material-ui/core/CardMedia';
+import Card from '@material-ui/core/Card';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -107,6 +109,9 @@ const useStyles = makeStyles(theme => ({
   },
   fullList: {
     width: 'auto',
+  },
+  media: {
+    height: 140,
   },
   footer: {
     top: 'auto',
@@ -473,8 +478,28 @@ class SignInScreen extends React.Component {
               justify="center"
               style={{ minHeight: '100vh' }}
             >
-              <Grid item xs={12}>
-                <img src={logo} alt="Logo" />
+              <Grid item xs={12} >
+              {/* <Avatar 
+              alt="Remy Sharp" 
+              src={logo} 
+              style={{
+                width: theme.spacing(25), 
+                height: theme.spacing(25),
+                backgroundColor: 'transparent',
+                marginBottom: "0px"
+              }} 
+              /> */}
+              <Card style={{ maxWidth: 345, backgroundColor: 'transparent', marginBottom:"-50px"}} elevation={0}>
+                <CardMedia
+                  style={{
+                    height: 200,
+                    backgroundColor: 'transparent',
+                  }}
+                  image={logo}
+                  title="Contemplative Reptile"
+                  component="img"
+                />
+                </Card>
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="h1" component="h2">
