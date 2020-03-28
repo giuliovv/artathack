@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
 import * as firebase from "firebase/app";
@@ -9,6 +9,7 @@ import '@firebase/firestore'
 import { GeoCollectionReference, GeoFirestore, GeoQuery, GeoQuerySnapshot } from 'geofirestore';
 
 import { geolocated } from "react-geolocated";
+import Gallery from "react-photo-gallery";
 
 import Popup from "reactjs-popup";
 import CanvasDraw from "react-canvas-draw";
@@ -167,22 +168,32 @@ function LocationOk(props){
 
 function VistaDisegni (props) {
   const db = firebase.firestore();
-  // const geofirestore = new GeoFirestore(firebase.firestore());
-  // var query;
-  // if (props.isGeolocationAvailable && props.isGeolocationEnabled && props.coords != null){
-  //   query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(props.coords.latitude, props.coords.longitude), radius: 1000 });
-  // }
-  // else {
-  //   query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(puntoSpeciale[0], puntoSpeciale[1]), radius: 1000 });
-  // }
-  // query.get().then((value) => {
-  //   value.docs.map((v) => console.log(v.data().base64));
-  //   console.log(value.docs);
-  // });
-  db.collection('disegni').orderBy("timestamp").limit(20).get().then(doc =>
-    console.log(doc),
+  const geofirestore = new GeoFirestore(db);
+  const [photos, setPhotos] = useState([]);
+  var query;
+  if (props.isGeolocationAvailable && props.isGeolocationEnabled && props.coords != null){
+    query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(props.coords.latitude, props.coords.longitude), radius: 1000 });
+  }
+  else {
+    query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(puntoSpeciale[0], puntoSpeciale[1]), radius: 1000 });
+  }
+  if (photos.length == 0){
+    query.get().then((value) => {
+      setPhotos(value.docs.map((v) => ({
+        src: v.data().base64,
+        height: 5,
+        width: 5,
+      })));
+    });
+  }
+  if (photos.lenght < 1){
+    return <p>Ancora non ci sono immagini in questa zona, aggiungi tu la prima!</p>
+  }
+  return (
+    <div style={{overflow: 'auto', height: 'inherit', display: 'block', position:"relative"}}>
+      <Gallery photos={photos} />
+    </div>
   )
-  return <p>CIAONE</p>
 }
 
 class Disegno extends React.Component {
