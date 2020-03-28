@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/spesa/static/css/main.0d10a121.chunk.css",
-    "main.js": "/spesa/static/js/main.6d399364.chunk.js",
-    "main.js.map": "/spesa/static/js/main.6d399364.chunk.js.map",
+    "main.js": "/spesa/static/js/main.da2ecc76.chunk.js",
+    "main.js.map": "/spesa/static/js/main.da2ecc76.chunk.js.map",
     "runtime-main.js": "/spesa/static/js/runtime-main.fa788eee.js",
     "runtime-main.js.map": "/spesa/static/js/runtime-main.fa788eee.js.map",
-    "static/js/2.ab12a6e5.chunk.js": "/spesa/static/js/2.ab12a6e5.chunk.js",
-    "static/js/2.ab12a6e5.chunk.js.map": "/spesa/static/js/2.ab12a6e5.chunk.js.map",
+    "static/js/2.dee06982.chunk.js": "/spesa/static/js/2.dee06982.chunk.js",
+    "static/js/2.dee06982.chunk.js.map": "/spesa/static/js/2.dee06982.chunk.js.map",
     "index.html": "/spesa/index.html",
-    "precache-manifest.84794ba147da1e0021653d07f20d4475.js": "/spesa/precache-manifest.84794ba147da1e0021653d07f20d4475.js",
+    "precache-manifest.4e52b567c5b3cdad27e5e3a25ec38d5b.js": "/spesa/precache-manifest.4e52b567c5b3cdad27e5e3a25ec38d5b.js",
     "service-worker.js": "/spesa/service-worker.js",
     "static/css/main.0d10a121.chunk.css.map": "/spesa/static/css/main.0d10a121.chunk.css.map",
-    "static/js/2.ab12a6e5.chunk.js.LICENSE.txt": "/spesa/static/js/2.ab12a6e5.chunk.js.LICENSE.txt"
+    "static/js/2.dee06982.chunk.js.LICENSE.txt": "/spesa/static/js/2.dee06982.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.fa788eee.js",
-    "static/js/2.ab12a6e5.chunk.js",
+    "static/js/2.dee06982.chunk.js",
     "static/css/main.0d10a121.chunk.css",
-    "static/js/main.6d399364.chunk.js"
+    "static/js/main.da2ecc76.chunk.js"
   ]
 }
