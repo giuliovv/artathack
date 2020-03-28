@@ -30,6 +30,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import UndoIcon from '@material-ui/icons/Undo';
+import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
 import ImageIcon from '@material-ui/icons/Image';
 
@@ -124,6 +125,16 @@ function BottomAppBar(props) {
           <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={() => {props.handleChange()}}>
             <ImageIcon />
           </IconButton>
+          <Button
+          color='inherit'
+          style={{
+            left: 20
+          }}
+          >
+          <Typography>
+            Dona ora!
+          </Typography>
+      </Button>
           <div className={useStyles().grow} />
           <Avatar alt={firebase.auth().currentUser.displayName} src={firebase.auth().currentUser.photoURL} />
           <IconButton color="inherit" aria-label="logout" onClick={() => {firebase.auth().signOut()}}>
@@ -223,7 +234,7 @@ class Disegno extends React.Component {
       })
       .catch(err => {
         if (localDisegno != null){
-          this.setState({ 
+          this.setState({
             datiDisegno: localDisegno,
            })
         }
@@ -232,7 +243,7 @@ class Disegno extends React.Component {
 
   render() {
     if (this.props.vistaDisegni){
-      return (<VistaDisegni 
+      return (<VistaDisegni
             isGeolocationAvailable={this.props.isGeolocationAvailable}
             isGeolocationEnabled={this.props.isGeolocationEnabled}
             coords={this.props.coords}
@@ -240,8 +251,26 @@ class Disegno extends React.Component {
     }
     return (
       <div>
-        <Fab 
-          color="secondary" 
+
+      <Fab
+      color="secondary"
+      aria-label="altro"
+      style={{
+        margin: 0,
+        zIndex: 1,
+        top: 'auto',
+        right: 20,
+        bottom: 80,
+        left: 'auto',
+        position: 'fixed',
+      }}>
+      <Popup trigger={
+      <AddIcon style={{ color: "white" }}/>}
+      position="left center">
+
+
+        <Fab
+          color="secondary"
           aria-label="colore"
           style={{
             margin: 0,
@@ -261,8 +290,8 @@ class Disegno extends React.Component {
               />
             </Popup>
         </Fab>
-        <Fab 
-          color="secondary" 
+        <Fab
+          color="secondary"
           aria-label="save"
           style={{
             margin: 0,
@@ -275,9 +304,9 @@ class Disegno extends React.Component {
           }}
           >
             <Popup trigger={
-            <SaveIcon style={{ color: "white" }}/>} 
+            <SaveIcon style={{ color: "white" }}/>}
             position="left center">
-            <LocationOk 
+            <LocationOk
             isGeolocationAvailable={this.props.isGeolocationAvailable}
             isGeolocationEnabled={this.props.isGeolocationEnabled}
             coords={this.props.coords}
@@ -285,8 +314,8 @@ class Disegno extends React.Component {
             />
           </Popup>
         </Fab>
-        <Fab 
-          color="secondary" 
+        <Fab
+          color="secondary"
           aria-label="undo"
           style={{
             margin: 0,
@@ -303,8 +332,8 @@ class Disegno extends React.Component {
             }}
             style={{ color: "white" }}/>
         </Fab>
-        <Fab 
-          color="secondary" 
+        <Fab
+          color="secondary"
           aria-label="clear"
           style={{
             margin: 0,
@@ -320,6 +349,10 @@ class Disegno extends React.Component {
               this.saveableCanvas.clear();
             }} style={{ color: "white" }}/>
         </Fab>
+
+        </Popup>
+        </Fab>
+
           <CanvasDraw
           hideInterface={(isMobile) ? true : false}
           ref={canvasDraw => {
@@ -344,7 +377,7 @@ function Footer(){
     <AppBar position="fixed" color="primary" className={useStyles().footer} elevation={0}>
       <Toolbar>
       <IconButton>
-          <Button color="inherit" onClick={() => window.open("https://www.privacypolicygenerator.info/live.php?token=bOaq2FxZvBZ3mJY3PESMHOe27PREKKjp")}>Privacy policy</Button>
+          <Button color="secondary" onClick={() => window.open("https://www.privacypolicygenerator.info/live.php?token=bOaq2FxZvBZ3mJY3PESMHOe27PREKKjp")}>Privacy policy</Button>
         </IconButton>
         <div className={useStyles().grow} />
         <Typography>
@@ -385,7 +418,7 @@ class SignInScreen extends React.Component {
         (user) => this.setState({isSignedIn: !!user})
     );
   }
-  
+
   // Make sure we un-register Firebase observers when the component unmounts.
   componentWillUnmount() {
     this.unregisterAuthObserver();
@@ -399,7 +432,7 @@ class SignInScreen extends React.Component {
     if (!this.state.isSignedIn) {
       return (
         <div>
-          <div 
+          <div
           style={{
             backgroundColor: "#315190",
             }}>
@@ -416,10 +449,10 @@ class SignInScreen extends React.Component {
                 <Typography variant="h1" component="h2">
                 Art@Hack
                 </Typography>
-              </Grid>  
+              </Grid>
               <Grid item xs={12}>
               <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>
-              </Grid>   
+              </Grid>
             </Grid>
           </div>
           <Footer/>
@@ -428,12 +461,12 @@ class SignInScreen extends React.Component {
     }
     return (
       <div>
-        <BottomAppBar 
+        <BottomAppBar
         vistaDisegni={this.state.vistaDisegni}
         handleChange={this.handleChange}
         />
-        <Disegno 
-        isGeolocationAvailable={this.props.isGeolocationAvailable} 
+        <Disegno
+        isGeolocationAvailable={this.props.isGeolocationAvailable}
         isGeolocationEnabled={this.props.isGeolocationEnabled}
         coords={this.props.coords}
         vistaDisegni={this.state.vistaDisegni}
@@ -447,8 +480,8 @@ function App(props) {
   return (
       <div>
           <ThemeProvider theme={theme}>
-            <SignInScreen 
-            isGeolocationAvailable={props.isGeolocationAvailable} 
+            <SignInScreen
+            isGeolocationAvailable={props.isGeolocationAvailable}
             isGeolocationEnabled={props.isGeolocationEnabled}
             coords={props.coords}
             />
