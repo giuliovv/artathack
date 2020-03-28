@@ -492,17 +492,7 @@ class SignInScreen extends React.Component {
               style={{ minHeight: '100vh' }}
             >
               <Grid item xs={12} >
-              {/* <Avatar 
-              alt="Remy Sharp" 
-              src={logo} 
-              style={{
-                width: theme.spacing(25), 
-                height: theme.spacing(25),
-                backgroundColor: 'transparent',
-                marginBottom: "0px"
-              }} 
-              /> */}
-              <Card style={{ maxWidth: 345, backgroundColor: 'transparent', marginBottom:"-50px"}} elevation={0}>
+              <Card style={{ maxWidth: 345, backgroundColor: 'transparent', marginTop:"30px", marginBottom:"-50px"}} elevation={0}>
                 <CardMedia
                   style={{
                     height: 200,
