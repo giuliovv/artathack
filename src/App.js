@@ -192,8 +192,8 @@ function VistaDisegni (props) {
     query.get().then((value) => {
       setPhotos(value.docs.map((v) => ({
         src: v.data().base64,
-        height: 5,
-        width: 5,
+        // height: 5,
+        // width: 5,
       })));
     });
   }
@@ -201,7 +201,7 @@ function VistaDisegni (props) {
     return <p>Ancora non ci sono immagini in questa zona, aggiungi tu la prima!</p>
   }
   return (
-    <div style={{overflow: 'auto', height: 'inherit', display: 'block', position:"relative"}}>
+    <div style={{overflow: 'auto', height: '100vh', display: 'block', position:"relative", marginBottom:"700px"}}>
       <Gallery photos={photos} />
     </div>
   )
