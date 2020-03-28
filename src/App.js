@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import './App.css';
 
 import * as firebase from "firebase/app";
+import * as firebaseui from 'firebaseui'
 import 'firebaseui'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import 'firebase/analytics';
@@ -127,6 +128,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function BottomAppBar(props) {
+  var displayName = "Anonimo";
+  if (firebase.auth().currentUser.displayName){
+    displayName = firebase.auth().currentUser.displayName;
+  }
+  var photoUrl = undefined;
+  if (firebase.auth().currentUser.photoURL){
+    photoUrl = firebase.auth().currentUser.photoURL;
+  }
   return (
     <AppBar position="fixed" color="primary" className={useStyles().appBar}>
         <Toolbar>
@@ -145,7 +154,7 @@ function BottomAppBar(props) {
           </Typography>
       </Button>
           <div className={useStyles().grow} />
-          <Avatar alt={firebase.auth().currentUser.displayName} src={firebase.auth().currentUser.photoURL} />
+          <Avatar alt={displayName} src={photoUrl} >A</Avatar>
           <IconButton color="inherit" aria-label="logout" onClick={() => {firebase.auth().signOut()}}>
             <ExitToAppIcon />
           </IconButton>
@@ -175,7 +184,7 @@ function LocationOk(props){
   const firestore = firebase.firestore();
   const geoFirestore = new GeoFirestore(firestore);
   const geoCollectionRef = geoFirestore.collection('disegni');
-  geoCollectionRef.doc(firebase.auth().currentUser.email).set({
+  geoCollectionRef.doc(firebase.auth().currentUser.uid).set({
     disegno: props.saveableCanvas.getSaveData(),
     base64: props.saveableCanvas.canvasContainer.children[1].toDataURL(),
     coordinates: new firebase.firestore.GeoPoint(latitude, longitude),
@@ -260,7 +269,7 @@ class Disegno extends React.Component {
   componentDidMount() {
     var localDisegno = localStorage.getItem("arteInsiemeSalvataggio");
     const db = firebase.firestore();
-    let cityRef = db.collection("disegni").doc(firebase.auth().currentUser.email);
+    let cityRef = db.collection("disegni").doc(firebase.auth().currentUser.uid);
     cityRef.get()
       .then(doc => {
         if (doc.exists) {
@@ -439,6 +448,7 @@ class SignInScreen extends React.Component {
     // We will display Google and Facebook as auth providers.
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
     ],
     callbacks: {
       // Avoid redirects after sign-in.
