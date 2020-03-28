@@ -125,7 +125,7 @@ function BottomAppBar(props) {
           <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={() => {props.handleChange()}}>
             <ImageIcon />
           </IconButton>
-          <Button
+          <Button href='https://www.gofundme.com/f/hackhome-sostieni-gli-ospedali-della-lombardia'
           color='inherit'
           style={{
             left: 20
