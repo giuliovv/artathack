@@ -262,7 +262,7 @@ class Disegno extends React.Component {
                     <Fab color="secondary">
                       <Popup
                         trigger={
-                          <ColorizeIcon/>
+                          <ColorizeIcon style={{ color: "white" }}/>
                         }
                         position="left center">
                         <GithubPicker
@@ -281,7 +281,7 @@ class Disegno extends React.Component {
                     <Fab color="secondary">
                       <Popup
                         trigger={
-                          <SaveIcon/>
+                          <SaveIcon style={{ color: "white" }}/>
                         }
                         position="left center">
                         <LocationOk
@@ -299,7 +299,7 @@ class Disegno extends React.Component {
                   primaryText="Annulla"
                   rightAvatar={
                     <Fab color="secondary">
-                      <UndoIcon onClick={() => {
+                      <UndoIcon style={{ color: "white" }} onClick={() => {
                         this.saveableCanvas.undo();
                       }}/>
                     </Fab>
@@ -310,7 +310,7 @@ class Disegno extends React.Component {
                   primaryText="Elimina tutto"
                   rightAvatar={
                     <Fab color="secondary">
-                      <DeleteIcon onClick={() => {
+                      <DeleteIcon style={{ color: "white" }} onClick={() => {
                         this.saveableCanvas.clear();
                       }}/>
                     </Fab>
