@@ -24,6 +24,7 @@ import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { createMuiTheme, makeStyles, ThemeProvider, responsiveFontSizes } from '@material-ui/core/styles';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import ColorizeIcon from '@material-ui/icons/Colorize';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -33,6 +34,7 @@ import UndoIcon from '@material-ui/icons/Undo';
 import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
 import ImageIcon from '@material-ui/icons/Image';
+import { SpeedDial, BubbleList, BubbleListItem } from 'react-speed-dial';
 
 const puntoSpeciale = [45.4642, 9.1900];
 
@@ -251,107 +253,64 @@ class Disegno extends React.Component {
     }
     return (
       <div>
+      <MuiThemeProvider>
+            <SpeedDial hasBackdrop={true} style={{bottom: 60}}>
+              <BubbleList style={{ color: "primary" }}>
+                <BubbleListItem
+                  primaryText="Cambia colore"
+                  rightAvatar={
+                    <Popup
+                      trigger={
+                        <ColorizeIcon/>
+                      }
+                      position="left center">
+                      <SketchPicker
+                        color={ this.state.color }
+                        onChangeComplete={ this.handleChangeComplete }
+                        disableAlpha={ true }
+                        />
+                    </Popup>
+                  }
+                />
 
-      <Fab
-      color="secondary"
-      aria-label="altro"
-      style={{
-        margin: 0,
-        zIndex: 1,
-        top: 'auto',
-        right: 20,
-        bottom: 80,
-        left: 'auto',
-        position: 'fixed',
-      }}>
-      <Popup trigger={
-      <AddIcon style={{ color: "white" }}/>}
-      position="left center">
+                <BubbleListItem
+                  primaryText="Save"
+                  rightAvatar={
+                    <Popup
+                      trigger={
+                        <SaveIcon/>
+                      }
+                      position="left center">
+                      <LocationOk
+                        isGeolocationAvailable={this.props.isGeolocationAvailable}
+                        isGeolocationEnabled={this.props.isGeolocationEnabled}
+                        coords={this.props.coords}
+                        saveableCanvas={this.saveableCanvas}
+                      />
+                    </Popup>
+                  }
+                />
 
+                <BubbleListItem
+                  primaryText="Undo"
+                  rightAvatar={
+                    <UndoIcon onClick={() => {
+                      this.saveableCanvas.undo();
+                    }}/>
+                  }
+                />
 
-        <Fab
-          color="secondary"
-          aria-label="colore"
-          style={{
-            margin: 0,
-            zIndex: 1,
-            top: 'auto',
-            right: 20,
-            bottom: 260,
-            left: 'auto',
-            position: 'fixed',
-          }}
-          >
-            <Popup trigger={<ColorizeIcon style={{ color: "white" }}/>} position="left center">
-              <SketchPicker
-                color={ this.state.color }
-                onChangeComplete={ this.handleChangeComplete }
-                disableAlpha={ true }
-              />
-            </Popup>
-        </Fab>
-        <Fab
-          color="secondary"
-          aria-label="save"
-          style={{
-            margin: 0,
-            zIndex: 1,
-            top: 'auto',
-            right: 20,
-            bottom: 200,
-            left: 'auto',
-            position: 'fixed',
-          }}
-          >
-            <Popup trigger={
-            <SaveIcon style={{ color: "white" }}/>}
-            position="left center">
-            <LocationOk
-            isGeolocationAvailable={this.props.isGeolocationAvailable}
-            isGeolocationEnabled={this.props.isGeolocationEnabled}
-            coords={this.props.coords}
-            saveableCanvas={this.saveableCanvas}
-            />
-          </Popup>
-        </Fab>
-        <Fab
-          color="secondary"
-          aria-label="undo"
-          style={{
-            margin: 0,
-            zIndex: 1,
-            // top: 'auto',
-            right: 20,
-            bottom: 140,
-            left: 'auto',
-            position: 'fixed',
-          }}
-          >
-            <UndoIcon onClick={() => {
-              this.saveableCanvas.undo();
-            }}
-            style={{ color: "white" }}/>
-        </Fab>
-        <Fab
-          color="secondary"
-          aria-label="clear"
-          style={{
-            margin: 0,
-            zIndex: 1,
-            top: 'auto',
-            right: 20,
-            bottom: 80,
-            left: 'auto',
-            position: 'fixed',
-          }}
-          >
-            <DeleteIcon onClick={() => {
-              this.saveableCanvas.clear();
-            }} style={{ color: "white" }}/>
-        </Fab>
-
-        </Popup>
-        </Fab>
+                <BubbleListItem
+                  primaryText="Clear all"
+                  rightAvatar={
+                    <DeleteIcon onClick={() => {
+                      this.saveableCanvas.clear();
+                    }}/>
+                  }
+                />
+              </BubbleList>
+            </SpeedDial>
+          </MuiThemeProvider>
 
           <CanvasDraw
           hideInterface={(isMobile) ? true : false}
