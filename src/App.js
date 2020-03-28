@@ -125,6 +125,16 @@ function BottomAppBar(props) {
           <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={() => {props.handleChange()}}>
             <ImageIcon />
           </IconButton>
+          <Button
+          color='inherit'
+          style={{
+            left: 20
+          }}
+          >
+          <Typography>
+            Dona ora!
+          </Typography>
+      </Button>
           <div className={useStyles().grow} />
           <Avatar alt={firebase.auth().currentUser.displayName} src={firebase.auth().currentUser.photoURL} />
           <IconButton color="inherit" aria-label="logout" onClick={() => {firebase.auth().signOut()}}>
