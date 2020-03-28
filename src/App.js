@@ -34,7 +34,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import UndoIcon from '@material-ui/icons/Undo';
-import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
 import ImageIcon from '@material-ui/icons/Image';
 
@@ -269,6 +268,7 @@ function VistaDisegni (props) {
   )
 }
 
+
 class Disegno extends React.Component {
 
   state = {
@@ -313,24 +313,6 @@ class Disegno extends React.Component {
     }
     return (
       <div>
-
-      <Fab
-      color="secondary"
-      aria-label="altro"
-      style={{
-        margin: 0,
-        zIndex: 1,
-        top: 'auto',
-        right: 20,
-        bottom: 80,
-        left: 'auto',
-        position: 'fixed',
-      }}>
-      <Popup trigger={
-      <AddIcon style={{ color: "white" }}/>}
-      position="left center">
-
-
         <Fab
           color="secondary"
           aria-label="colore"
@@ -410,9 +392,6 @@ class Disegno extends React.Component {
             <DeleteIcon onClick={() => {
               this.saveableCanvas.clear();
             }} style={{ color: "white" }}/>
-        </Fab>
-
-        </Popup>
         </Fab>
 
           <CanvasDraw
