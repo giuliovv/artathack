@@ -30,6 +30,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import UndoIcon from '@material-ui/icons/Undo';
+import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
 import ImageIcon from '@material-ui/icons/Image';
 
@@ -254,7 +255,7 @@ class Disegno extends React.Component {
         position: 'fixed',
       }}>
       <Popup trigger={
-      <IconButton style={{ color: "white" }}/>}
+      <AddIcon style={{ color: "white" }}/>}
       position="left center">
 
 
