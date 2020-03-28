@@ -74,6 +74,9 @@ let theme = createMuiTheme({
     h1: {
       color: "#fed111"
     },
+    h5: {
+      color: "white"
+    },
     fontFamily: "'Baloo Da 2', cursive",
   }
 });
@@ -514,6 +517,11 @@ class SignInScreen extends React.Component {
               <Grid item xs={12}>
                 <Typography variant="h1" component="h2">
                 Art@Hack
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h5" component="h5">
+                Una grande opera d'arte collettiva.
                 </Typography>
               </Grid>
               <Grid item xs={12}>
