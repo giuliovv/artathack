@@ -38,6 +38,7 @@ import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
 import ImageIcon from '@material-ui/icons/Image';
 
+import banner from './banner_donazione.svg';
 import logo from './logo.svg';
 
 const puntoSpeciale = [45.4642, 9.1900];
@@ -146,7 +147,7 @@ function BottomAppBar(props) {
             <ImageIcon />
           </IconButton>
           <Button
-           onClick={() => { window.open("https://www.gofundme.com/f/hackhome-sostieni-gli-ospedali-della-lombardia") }}
+           onClick={() => { window.open("https://donazioni.cri.it/donazioni/dona-per-emergenza-coronavirus") }}
           color='inherit'
           style={{
             left: 20
@@ -194,7 +195,18 @@ function LocationOk(props){
     timestamp: + new Date(),
   });
   return <Typography color="textPrimary" style={{"textTransform": "lowercase"}}>
-      {testo}
+          {testo}
+          <Card style={{  backgroundColor: 'transparent'}} elevation={0}>
+            <CardMedia
+              style={{
+                height: 100,
+                backgroundColor: 'transparent',
+              }}
+              image={banner}
+              title="Contemplative Reptile"
+              component="img"
+            />
+          </Card>
       </Typography>
 }
 
@@ -489,10 +501,11 @@ class SignInScreen extends React.Component {
               direction="column"
               alignItems="center"
               justify="center"
-              style={{ minHeight: '100vh' }}
+              spacing={1}
+              style={{ minHeight: '100vh', overflowY: "scroll"}}
             >
               <Grid item xs={12} >
-              <Card style={{ maxWidth: 345, backgroundColor: 'transparent', marginTop:"30px", marginBottom:"-50px"}} elevation={0}>
+              <Card style={{ maxWidth: 345, backgroundColor: 'transparent', marginBottom:"-50px"}} elevation={0}>
                 <CardMedia
                   style={{
                     height: 200,
