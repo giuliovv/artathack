@@ -13,7 +13,7 @@ import Gallery from "react-photo-gallery";
 
 import Popup from "reactjs-popup";
 import CanvasDraw from "react-canvas-draw";
-import { SketchPicker } from 'react-color';
+import { SketchPicker, GithubPicker } from 'react-color';
 import { isMobile } from "react-device-detect";
 
 import AppBar from '@material-ui/core/AppBar';
@@ -254,8 +254,8 @@ class Disegno extends React.Component {
     return (
       <div>
       <MuiThemeProvider>
-            <SpeedDial hasBackdrop={true} style={{bottom: 60}}>
-              <BubbleList style={{ color: "primary" }}>
+            <SpeedDial hasBackdrop={true} style={{bottom: 60}} floatingActionButtonProps={{backgroundColor: "#40bd47"}}>
+              <BubbleList>
                 <BubbleListItem
                   primaryText="Cambia colore"
                   rightAvatar={
@@ -264,7 +264,7 @@ class Disegno extends React.Component {
                         <ColorizeIcon/>
                       }
                       position="left center">
-                      <SketchPicker
+                      <GithubPicker
                         color={ this.state.color }
                         onChangeComplete={ this.handleChangeComplete }
                         disableAlpha={ true }
