@@ -35,6 +35,8 @@ import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
 import ImageIcon from '@material-ui/icons/Image';
 
+import logo from './logo.svg';
+
 const puntoSpeciale = [45.4642, 9.1900];
 
 var firebaseConfig = {
@@ -205,7 +207,7 @@ function VistaDisegni (props) {
   else {
     query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(puntoSpeciale[0], puntoSpeciale[1]), radius: 1000 }).limit(30);
   }
-  if (photos.length == 0){
+  if (photos.length === 0){
     query.get().then((value) => {
       setPhotos(value.docs.map((v) => ({
         src: v.data().base64,
@@ -407,16 +409,12 @@ function Footer(){
   return (
     <AppBar position="fixed" color="primary" className={useStyles().footer} elevation={0}>
       <Toolbar>
-      <IconButton>
-          <Button color="secondary" onClick={() => window.open("https://www.privacypolicygenerator.info/live.php?token=bOaq2FxZvBZ3mJY3PESMHOe27PREKKjp")}>Privacy policy</Button>
-        </IconButton>
+        <Button color="secondary" onClick={() => window.open("https://www.privacypolicygenerator.info/live.php?token=bOaq2FxZvBZ3mJY3PESMHOe27PREKKjp")}>Privacy policy</Button>
         <div className={useStyles().grow} />
         <Typography>
           Sponsorizzato da:
         </Typography>
-      <IconButton>
-          <Button color="secondary" onClick={() => window.open("https://www.morocolor.it/")}>Primo</Button>
-        </IconButton>
+        <Button color="secondary" onClick={() => window.open("https://www.morocolor.it/")}>Primo</Button>
       </Toolbar>
     </AppBar>
   )
@@ -475,7 +473,9 @@ class SignInScreen extends React.Component {
               justify="center"
               style={{ minHeight: '100vh' }}
             >
-
+              <Grid item xs={12}>
+                <img src={logo} alt="Logo" />
+              </Grid>
               <Grid item xs={12}>
                 <Typography variant="h1" component="h2">
                 Art@Hack
