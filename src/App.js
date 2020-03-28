@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import './App.css';
 
 import * as firebase from "firebase/app";
+import * as firebaseui from 'firebaseui'
 import 'firebaseui'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import 'firebase/analytics';
@@ -10,6 +11,7 @@ import { GeoCollectionReference, GeoFirestore, GeoQuery, GeoQuerySnapshot } from
 
 import { geolocated } from "react-geolocated";
 import Gallery from "react-photo-gallery";
+import Carousel, { Modal, ModalGateway } from "react-images";
 
 import Popup from "reactjs-popup";
 import CanvasDraw from "react-canvas-draw";
@@ -19,6 +21,8 @@ import { isMobile } from "react-device-detect";
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import CardMedia from '@material-ui/core/CardMedia';
+import Card from '@material-ui/core/Card';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -31,10 +35,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import UndoIcon from '@material-ui/icons/Undo';
-import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
 import ImageIcon from '@material-ui/icons/Image';
 import { SpeedDial, BubbleList, BubbleListItem } from 'react-speed-dial';
+
+import banner from './banner_donazione.svg';
+import logo from './logo.svg';
 
 const puntoSpeciale = [45.4642, 9.1900];
 
@@ -69,6 +75,9 @@ let theme = createMuiTheme({
     },
     h1: {
       color: "#fed111"
+    },
+    h5: {
+      color: "white"
     },
     fontFamily: "'Baloo Da 2', cursive",
   }
@@ -107,6 +116,9 @@ const useStyles = makeStyles(theme => ({
   fullList: {
     width: 'auto',
   },
+  media: {
+    height: 140,
+  },
   footer: {
     top: 'auto',
     bottom: 0,
@@ -121,13 +133,22 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function BottomAppBar(props) {
+  var displayName = "Anonimo";
+  if (firebase.auth().currentUser.displayName){
+    displayName = firebase.auth().currentUser.displayName;
+  }
+  var photoUrl = undefined;
+  if (firebase.auth().currentUser.photoURL){
+    photoUrl = firebase.auth().currentUser.photoURL;
+  }
   return (
     <AppBar position="fixed" color="primary" className={useStyles().appBar}>
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={() => {props.handleChange()}}>
             <ImageIcon />
           </IconButton>
-          <Button onClick={() => { window.open("https://www.gofundme.com/f/hackhome-sostieni-gli-ospedali-della-lombardia") }}
+          <Button
+           onClick={() => { window.open("https://donazioni.cri.it/donazioni/dona-per-emergenza-coronavirus") }}
           color='inherit'
           style={{
             left: 20
@@ -138,7 +159,7 @@ function BottomAppBar(props) {
           </Typography>
       </Button>
           <div className={useStyles().grow} />
-          <Avatar alt={firebase.auth().currentUser.displayName} src={firebase.auth().currentUser.photoURL} />
+          <Avatar alt={displayName} src={photoUrl} >A</Avatar>
           <IconButton color="inherit" aria-label="logout" onClick={() => {firebase.auth().signOut()}}>
             <ExitToAppIcon />
           </IconButton>
@@ -168,14 +189,25 @@ function LocationOk(props){
   const firestore = firebase.firestore();
   const geoFirestore = new GeoFirestore(firestore);
   const geoCollectionRef = geoFirestore.collection('disegni');
-  geoCollectionRef.doc(firebase.auth().currentUser.email).set({
+  geoCollectionRef.doc(firebase.auth().currentUser.uid).set({
     disegno: props.saveableCanvas.getSaveData(),
     base64: props.saveableCanvas.canvasContainer.children[1].toDataURL(),
     coordinates: new firebase.firestore.GeoPoint(latitude, longitude),
     timestamp: + new Date(),
   });
   return <Typography color="textPrimary" style={{"textTransform": "lowercase"}}>
-      {testo}
+          {testo}
+          <Card style={{  backgroundColor: 'transparent'}} elevation={0}>
+            <CardMedia
+              style={{
+                height: 100,
+                backgroundColor: 'transparent',
+              }}
+              image={banner}
+              title="Contemplative Reptile"
+              component="img"
+            />
+          </Card>
       </Typography>
 }
 
@@ -183,19 +215,34 @@ function VistaDisegni (props) {
   const db = firebase.firestore();
   const geofirestore = new GeoFirestore(db);
   const [photos, setPhotos] = useState([]);
+
+  const [currentImage, setCurrentImage] = useState(0);
+  const [viewerIsOpen, setViewerIsOpen] = useState(false);
+  const openLightbox = useCallback((event, { photo, index }) => {
+    setCurrentImage(index);
+    setViewerIsOpen(true);
+  }, []);
+
+  const closeLightbox = () => {
+    setCurrentImage(0);
+    setViewerIsOpen(false);
+  };
+
+  var altezza = window.innerHeight;
+  var larghezza = (isMobile) ? undefined : window.innerWidth;
   var query;
   if (props.isGeolocationAvailable && props.isGeolocationEnabled && props.coords != null){
-    query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(props.coords.latitude, props.coords.longitude), radius: 1000 });
+    query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(props.coords.latitude, props.coords.longitude), radius: 1000 }).limit(30);
   }
   else {
-    query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(puntoSpeciale[0], puntoSpeciale[1]), radius: 1000 });
+    query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(puntoSpeciale[0], puntoSpeciale[1]), radius: 1000 }).limit(30);
   }
-  if (photos.length == 0){
+  if (photos.length === 0){
     query.get().then((value) => {
       setPhotos(value.docs.map((v) => ({
         src: v.data().base64,
-        height: 5,
-        width: 5,
+        height: altezza,
+        width: larghezza,
       })));
     });
   }
@@ -203,11 +250,26 @@ function VistaDisegni (props) {
     return <p>Ancora non ci sono immagini in questa zona, aggiungi tu la prima!</p>
   }
   return (
-    <div style={{overflow: 'auto', height: 'inherit', display: 'block', position:"relative"}}>
-      <Gallery photos={photos} />
+    <div style={{overflow: 'auto', height: '100vh', display: 'block', position:"relative", marginBottom:"700px"}}>
+      <Gallery photos={photos} onClick={openLightbox}/>
+      <ModalGateway>
+        {viewerIsOpen ? (
+          <Modal onClose={closeLightbox}>
+            <Carousel
+              currentIndex={currentImage}
+              views={photos.map(x => ({
+                ...x,
+                srcset: x.srcSet,
+                caption: x.title
+              }))}
+            />
+          </Modal>
+        ) : null}
+      </ModalGateway>
     </div>
   )
 }
+
 
 class Disegno extends React.Component {
 
@@ -224,7 +286,7 @@ class Disegno extends React.Component {
   componentDidMount() {
     var localDisegno = localStorage.getItem("arteInsiemeSalvataggio");
     const db = firebase.firestore();
-    let cityRef = db.collection("disegni").doc(firebase.auth().currentUser.email);
+    let cityRef = db.collection("disegni").doc(firebase.auth().currentUser.uid);
     cityRef.get()
       .then(doc => {
         if (doc.exists) {
@@ -254,71 +316,71 @@ class Disegno extends React.Component {
     return (
       <div>
       <MuiThemeProvider>
-            <SpeedDial hasBackdrop={true} style={{bottom: 60}} floatingActionButtonProps={{backgroundColor: "#40bd47"}}>
-              <BubbleList>
-                <BubbleListItem
-                  primaryText="Cambia colore"
-                  rightAvatar={
-                    <Fab color="secondary">
-                      <Popup
-                        trigger={
-                          <ColorizeIcon style={{ color: "white" }}/>
-                        }
-                        position="left center">
-                        <GithubPicker
-                          color={ this.state.color }
-                          onChangeComplete={ this.handleChangeComplete }
-                          disableAlpha={ true }
-                          />
-                        </Popup>
-                      </Fab>
-                  }
-                />
+        <SpeedDial hasBackdrop={true} style={{ bottom: 60 }} floatingActionButtonProps={{ backgroundColor: "#40bd47" }}>
+          <BubbleList>
+            <BubbleListItem
+              primaryText="Cambia colore"
+              rightAvatar={
+                <Fab color="secondary">
+                  <Popup
+                    trigger={
+                      <ColorizeIcon style={{ color: "white" }} />
+                    }
+                    position="left center">
+                    <GithubPicker
+                      color={this.state.color}
+                      onChangeComplete={this.handleChangeComplete}
+                      disableAlpha={true}
+                    />
+                  </Popup>
+                </Fab>
+              }
+            />
 
-                <BubbleListItem
-                  primaryText="Salva"
-                  rightAvatar={
-                    <Fab color="secondary">
-                      <Popup
-                        trigger={
-                          <SaveIcon style={{ color: "white" }}/>
-                        }
-                        position="left center">
-                        <LocationOk
-                          isGeolocationAvailable={this.props.isGeolocationAvailable}
-                          isGeolocationEnabled={this.props.isGeolocationEnabled}
-                          coords={this.props.coords}
-                          saveableCanvas={this.saveableCanvas}
-                          />
-                      </Popup>
-                    </Fab>
-                  }
-                />
+            <BubbleListItem
+              primaryText="Salva"
+              rightAvatar={
+                <Fab color="secondary">
+                  <Popup
+                    trigger={
+                      <SaveIcon style={{ color: "white" }} />
+                    }
+                    position="left center">
+                    <LocationOk
+                      isGeolocationAvailable={this.props.isGeolocationAvailable}
+                      isGeolocationEnabled={this.props.isGeolocationEnabled}
+                      coords={this.props.coords}
+                      saveableCanvas={this.saveableCanvas}
+                    />
+                  </Popup>
+                </Fab>
+              }
+            />
 
-                <BubbleListItem
-                  primaryText="Annulla"
-                  rightAvatar={
-                    <Fab color="secondary">
-                      <UndoIcon style={{ color: "white" }} onClick={() => {
-                        this.saveableCanvas.undo();
-                      }}/>
-                    </Fab>
-                  }
-                />
+            <BubbleListItem
+              primaryText="Annulla"
+              rightAvatar={
+                <Fab color="secondary">
+                  <UndoIcon style={{ color: "white" }} onClick={() => {
+                    this.saveableCanvas.undo();
+                  }} />
+                </Fab>
+              }
+            />
 
-                <BubbleListItem
-                  primaryText="Elimina tutto"
-                  rightAvatar={
-                    <Fab color="secondary">
-                      <DeleteIcon style={{ color: "white" }} onClick={() => {
-                        this.saveableCanvas.clear();
-                      }}/>
-                    </Fab>
-                  }
-                />
-              </BubbleList>
-            </SpeedDial>
-          </MuiThemeProvider>
+            <BubbleListItem
+              primaryText="Elimina tutto"
+              rightAvatar={
+                <Fab color="secondary">
+                  <DeleteIcon style={{ color: "white" }} onClick={() => {
+                    this.saveableCanvas.clear();
+                  }} />
+                </Fab>
+              }
+            />
+          </BubbleList>
+        </SpeedDial>
+      </MuiThemeProvider>
 
           <CanvasDraw
           hideInterface={(isMobile) ? true : false}
@@ -343,16 +405,12 @@ function Footer(){
   return (
     <AppBar position="fixed" color="primary" className={useStyles().footer} elevation={0}>
       <Toolbar>
-      <IconButton>
-          <Button color="secondary" onClick={() => window.open("https://www.privacypolicygenerator.info/live.php?token=bOaq2FxZvBZ3mJY3PESMHOe27PREKKjp")}>Privacy policy</Button>
-        </IconButton>
+        <Button color="secondary" onClick={() => window.open("https://www.privacypolicygenerator.info/live.php?token=bOaq2FxZvBZ3mJY3PESMHOe27PREKKjp")}>Privacy policy</Button>
         <div className={useStyles().grow} />
         <Typography>
           Sponsorizzato da:
         </Typography>
-      <IconButton>
-          <Button color="secondary" onClick={() => window.open("https://www.morocolor.it/")}>Primo</Button>
-        </IconButton>
+        <Button color="secondary" onClick={() => window.open("https://www.morocolor.it/")}>Primo</Button>
       </Toolbar>
     </AppBar>
   )
@@ -372,6 +430,7 @@ class SignInScreen extends React.Component {
     // We will display Google and Facebook as auth providers.
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
     ],
     callbacks: {
       // Avoid redirects after sign-in.
@@ -409,12 +468,30 @@ class SignInScreen extends React.Component {
               direction="column"
               alignItems="center"
               justify="center"
-              style={{ minHeight: '100vh' }}
+              spacing={1}
+              style={{ minHeight: '100vh', overflowY: "scroll"}}
             >
-
+              <Grid item xs={12} >
+              <Card style={{ maxWidth: 345, backgroundColor: 'transparent', marginBottom:"-50px"}} elevation={0}>
+                <CardMedia
+                  style={{
+                    height: 200,
+                    backgroundColor: 'transparent',
+                  }}
+                  image={logo}
+                  title="Contemplative Reptile"
+                  component="img"
+                />
+                </Card>
+              </Grid>
               <Grid item xs={12}>
                 <Typography variant="h1" component="h2">
                 Art@Hack
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h5" component="h5">
+                Una grande opera d'arte collettiva.
                 </Typography>
               </Grid>
               <Grid item xs={12}>
