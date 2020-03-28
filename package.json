@@ -24,6 +24,7 @@
     "react-dom": "^16.13.1",
     "react-firebaseui": "^4.1.0",
     "react-geolocated": "^3.0.1",
+    "react-images": "^1.1.0",
     "react-photo-gallery": "^8.0.0",
     "react-scripts": "3.4.1",
     "react-scroll": "^1.7.16",

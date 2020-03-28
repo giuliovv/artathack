@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import './App.css';
 
 import * as firebase from "firebase/app";
@@ -10,6 +10,7 @@ import { GeoCollectionReference, GeoFirestore, GeoQuery, GeoQuerySnapshot } from
 
 import { geolocated } from "react-geolocated";
 import Gallery from "react-photo-gallery";
+import Carousel, { Modal, ModalGateway } from "react-images";
 
 import Popup from "reactjs-popup";
 import CanvasDraw from "react-canvas-draw";
@@ -182,19 +183,34 @@ function VistaDisegni (props) {
   const db = firebase.firestore();
   const geofirestore = new GeoFirestore(db);
   const [photos, setPhotos] = useState([]);
+
+  const [currentImage, setCurrentImage] = useState(0);
+  const [viewerIsOpen, setViewerIsOpen] = useState(false);
+  const openLightbox = useCallback((event, { photo, index }) => {
+    setCurrentImage(index);
+    setViewerIsOpen(true);
+  }, []);
+
+  const closeLightbox = () => {
+    setCurrentImage(0);
+    setViewerIsOpen(false);
+  };
+
+  var altezza = window.innerHeight;
+  var larghezza = (isMobile) ? undefined : window.innerWidth;
   var query;
   if (props.isGeolocationAvailable && props.isGeolocationEnabled && props.coords != null){
-    query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(props.coords.latitude, props.coords.longitude), radius: 1000 });
+    query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(props.coords.latitude, props.coords.longitude), radius: 1000 }).limit(30);
   }
   else {
-    query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(puntoSpeciale[0], puntoSpeciale[1]), radius: 1000 });
+    query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(puntoSpeciale[0], puntoSpeciale[1]), radius: 1000 }).limit(30);
   }
   if (photos.length == 0){
     query.get().then((value) => {
       setPhotos(value.docs.map((v) => ({
         src: v.data().base64,
-        // height: 5,
-        // width: 5,
+        height: altezza,
+        width: larghezza,
       })));
     });
   }
@@ -203,7 +219,21 @@ function VistaDisegni (props) {
   }
   return (
     <div style={{overflow: 'auto', height: '100vh', display: 'block', position:"relative", marginBottom:"700px"}}>
-      <Gallery photos={photos} />
+      <Gallery photos={photos} onClick={openLightbox}/>
+      <ModalGateway>
+        {viewerIsOpen ? (
+          <Modal onClose={closeLightbox}>
+            <Carousel
+              currentIndex={currentImage}
+              views={photos.map(x => ({
+                ...x,
+                srcset: x.srcSet,
+                caption: x.title
+              }))}
+            />
+          </Modal>
+        ) : null}
+      </ModalGateway>
     </div>
   )
 }
