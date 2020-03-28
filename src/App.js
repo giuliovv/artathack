@@ -367,7 +367,7 @@ function Footer(){
     <AppBar position="fixed" color="primary" className={useStyles().footer} elevation={0}>
       <Toolbar>
       <IconButton>
-          <Button color="inherit" onClick={() => window.open("https://www.privacypolicygenerator.info/live.php?token=bOaq2FxZvBZ3mJY3PESMHOe27PREKKjp")}>Privacy policy</Button>
+          <Button color="secondary" onClick={() => window.open("https://www.privacypolicygenerator.info/live.php?token=bOaq2FxZvBZ3mJY3PESMHOe27PREKKjp")}>Privacy policy</Button>
         </IconButton>
         <div className={useStyles().grow} />
         <Typography>
