@@ -259,53 +259,61 @@ class Disegno extends React.Component {
                 <BubbleListItem
                   primaryText="Cambia colore"
                   rightAvatar={
-                    <Popup
-                      trigger={
-                        <ColorizeIcon/>
-                      }
-                      position="left center">
-                      <GithubPicker
-                        color={ this.state.color }
-                        onChangeComplete={ this.handleChangeComplete }
-                        disableAlpha={ true }
-                        />
-                    </Popup>
+                    <Fab color="secondary">
+                      <Popup
+                        trigger={
+                          <ColorizeIcon/>
+                        }
+                        position="left center">
+                        <GithubPicker
+                          color={ this.state.color }
+                          onChangeComplete={ this.handleChangeComplete }
+                          disableAlpha={ true }
+                          />
+                        </Popup>
+                      </Fab>
                   }
                 />
 
                 <BubbleListItem
-                  primaryText="Save"
+                  primaryText="Salva"
                   rightAvatar={
-                    <Popup
-                      trigger={
-                        <SaveIcon/>
-                      }
-                      position="left center">
-                      <LocationOk
-                        isGeolocationAvailable={this.props.isGeolocationAvailable}
-                        isGeolocationEnabled={this.props.isGeolocationEnabled}
-                        coords={this.props.coords}
-                        saveableCanvas={this.saveableCanvas}
-                      />
-                    </Popup>
+                    <Fab color="secondary">
+                      <Popup
+                        trigger={
+                          <SaveIcon/>
+                        }
+                        position="left center">
+                        <LocationOk
+                          isGeolocationAvailable={this.props.isGeolocationAvailable}
+                          isGeolocationEnabled={this.props.isGeolocationEnabled}
+                          coords={this.props.coords}
+                          saveableCanvas={this.saveableCanvas}
+                          />
+                      </Popup>
+                    </Fab>
                   }
                 />
 
                 <BubbleListItem
-                  primaryText="Undo"
+                  primaryText="Annulla"
                   rightAvatar={
-                    <UndoIcon onClick={() => {
-                      this.saveableCanvas.undo();
-                    }}/>
+                    <Fab color="secondary">
+                      <UndoIcon onClick={() => {
+                        this.saveableCanvas.undo();
+                      }}/>
+                    </Fab>
                   }
                 />
 
                 <BubbleListItem
-                  primaryText="Clear all"
+                  primaryText="Elimina tutto"
                   rightAvatar={
-                    <DeleteIcon onClick={() => {
-                      this.saveableCanvas.clear();
-                    }}/>
+                    <Fab color="secondary">
+                      <DeleteIcon onClick={() => {
+                        this.saveableCanvas.clear();
+                      }}/>
+                    </Fab>
                   }
                 />
               </BubbleList>
