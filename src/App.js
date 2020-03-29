@@ -42,6 +42,9 @@ import { SpeedDial, BubbleList, BubbleListItem } from 'react-speed-dial';
 import banner from './banner_donazione.svg';
 import logo from './logo.svg';
 
+import banner from './banner_donazione.svg';
+import logo from './logo.svg';
+
 const puntoSpeciale = [45.4642, 9.1900];
 
 var firebaseConfig = {
@@ -355,6 +358,49 @@ class Disegno extends React.Component {
                   </Popup>
                 </Fab>
               }
+
+        <Fab
+          color="secondary"
+          aria-label="colore"
+          style={{
+            margin: 0,
+            zIndex: 1,
+            top: 'auto',
+            right: 20,
+            bottom: 260,
+            left: 'auto',
+            position: 'fixed',
+          }}
+          >
+            <Popup trigger={<ColorizeIcon style={{ color: "white" }}/>} position="left center">
+              <SketchPicker
+                color={ this.state.color }
+                onChangeComplete={ this.handleChangeComplete }
+                disableAlpha={ true }
+              />
+            </Popup>
+        </Fab>
+        <Fab
+          color="secondary"
+          aria-label="save"
+          style={{
+            margin: 0,
+            zIndex: 1,
+            top: 'auto',
+            right: 20,
+            bottom: 200,
+            left: 'auto',
+            position: 'fixed',
+          }}
+          >
+            <Popup trigger={
+            <SaveIcon style={{ color: "white" }}/>}
+            position="left center">
+            <LocationOk
+            isGeolocationAvailable={this.props.isGeolocationAvailable}
+            isGeolocationEnabled={this.props.isGeolocationEnabled}
+            coords={this.props.coords}
+            saveableCanvas={this.saveableCanvas}
             />
 
             <BubbleListItem
