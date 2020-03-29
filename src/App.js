@@ -230,23 +230,6 @@ function VistaMappa () {
     </div>
     )
 
-  // else {
-  //   query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(puntoSpeciale[0], puntoSpeciale[1]), radius: 1000 }).limit(30);
-  // }
-  // if (photos.length === 0){
-  //   query.get().then((value) => {
-  //     setPhotos(value.docs.map((v) => ({
-  //       src: v.data().base64,
-  //       height: altezza,
-  //       width: larghezza,
-  //     })));
-  //   });
-  // }
-  // return (
-  //   <div style={{overflow: 'auto', height: '100vh', display: 'block', position:"relative", marginBottom:"700px"}}>
-  //     <Gallery photos={photos} />
-  //   </div>
-
 }
 
 function VistaDisegni (props) {
@@ -565,7 +548,7 @@ class SignInScreen extends React.Component {
               <Card style={{ maxWidth: 345, backgroundColor: 'transparent', marginBottom:"-50px"}} elevation={0}>
                 <CardMedia
                   style={{
-                    height: 200,
+                    height: 170,
                     backgroundColor: 'transparent',
                   }}
                   image={logo}
