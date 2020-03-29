@@ -133,47 +133,47 @@ const useStyles = makeStyles(theme => ({
 
 function BottomAppBar(props) {
   var displayName = "Anonimo";
-  if (firebase.auth().currentUser.displayName){
+  if (firebase.auth().currentUser.displayName) {
     displayName = firebase.auth().currentUser.displayName;
   }
   var photoUrl = undefined;
-  if (firebase.auth().currentUser.photoURL){
+  if (firebase.auth().currentUser.photoURL) {
     photoUrl = firebase.auth().currentUser.photoURL;
   }
   return (
     <AppBar position="fixed" color="primary" className={useStyles().appBar}>
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={() => {props.handleChange()}}>
-            <ImageIcon />
-          </IconButton>
-          <Button
-           onClick={() => { window.open("https://donazioni.cri.it/donazioni/dona-per-emergenza-coronavirus") }}
+      <Toolbar>
+        <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={() => { props.handleChange() }}>
+          <ImageIcon />
+        </IconButton>
+        <Button
+          onClick={() => { window.open("https://donazioni.cri.it/donazioni/dona-per-emergenza-coronavirus") }}
           color='inherit'
           style={{
             left: 20
           }}
-          >
+        >
           <Typography>
             Dona ora!
           </Typography>
-      </Button>
-          <div className={useStyles().grow} />
-          <Avatar alt={displayName} src={photoUrl} >A</Avatar>
-          <IconButton color="inherit" aria-label="logout" onClick={() => {firebase.auth().signOut()}}>
-            <ExitToAppIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+        </Button>
+        <div className={useStyles().grow} />
+        <Avatar alt={displayName} src={photoUrl} >A</Avatar>
+        <IconButton color="inherit" aria-label="logout" onClick={() => { firebase.auth().signOut() }}>
+          <ExitToAppIcon />
+        </IconButton>
+      </Toolbar>
+    </AppBar>
   )
 }
 
-function LocationOk(props){
+function LocationOk(props) {
   let testo = "Salvataggio completato."
   let latitude, longitude;
-  if (! props.isGeolocationAvailable || ! props.isGeolocationEnabled){
+  if (!props.isGeolocationAvailable || !props.isGeolocationEnabled) {
     testo = "Salvataggio completato, abilita il gps per salvare il disegno nella tua posizione sul murales."
   }
-  if (props.coords == null){
+  if (props.coords == null) {
     latitude = puntoSpeciale[0];
     longitude = puntoSpeciale[1];
   }
@@ -194,45 +194,45 @@ function LocationOk(props){
     coordinates: new firebase.firestore.GeoPoint(latitude, longitude),
     timestamp: + new Date(),
   });
-  return <Typography color="textPrimary" style={{"textTransform": "lowercase"}}>
-          {testo}
-          <Card style={{  backgroundColor: 'transparent'}} elevation={0}>
-            <CardMedia
-              style={{
-                height: 100,
-                backgroundColor: 'transparent',
-              }}
-              image={banner}
-              title="Contemplative Reptile"
-              component="img"
-            />
-          </Card>
-      </Typography>
+  return <Typography color="textPrimary" style={{ "textTransform": "lowercase" }}>
+    {testo}
+    <Card style={{ backgroundColor: 'transparent' }} elevation={0}>
+      <CardMedia
+        style={{
+          height: 100,
+          backgroundColor: 'transparent',
+        }}
+        image={banner}
+        title="Contemplative Reptile"
+        component="img"
+      />
+    </Card>
+  </Typography>
 }
 
-function VistaMappa () {
+function VistaMappa() {
   const [photos, setPhotos] = useState([]);
   const db = firebase.firestore();
   let citiesRef = db.collection('disegno grande').orderBy("lat", 'desc');
-  if (photos.length === 0){
+  if (photos.length === 0) {
     citiesRef.get().then((value) => {
       setPhotos(value.docs.map((v) => ({
         src: "data:image/png;base64," + v.data().base64.ci
       })));
     })
-    .catch(err => {
-      console.log('Error getting documents', err);
-    });
+      .catch(err => {
+        console.log('Error getting documents', err);
+      });
   }
   return (
-    <div style={{overflow: 'auto', height: '100vh', display: 'block', position:"relative", marginBottom:"700px"}}>
+    <div style={{ overflow: 'auto', height: '100vh', display: 'block', position: "relative", marginBottom: "700px" }}>
       <Gallery photos={photos} />
     </div>
-    )
+  )
 
 }
 
-function VistaDisegni (props) {
+function VistaDisegni(props) {
   const db = firebase.firestore();
   const geofirestore = new GeoFirestore(db);
   const [photos, setPhotos] = useState([]);
@@ -253,13 +253,13 @@ function VistaDisegni (props) {
   var altezza = window.innerHeight;
   var larghezza = (isMobile) ? undefined : window.innerWidth;
   var query;
-  if (props.isGeolocationAvailable && props.isGeolocationEnabled && props.coords != null){
+  if (props.isGeolocationAvailable && props.isGeolocationEnabled && props.coords != null) {
     query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(props.coords.latitude, props.coords.longitude), radius: 1000 }).limit(30);
   }
   else {
     query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(puntoSpeciale[0], puntoSpeciale[1]), radius: 1000 }).limit(30);
   }
-  if (photos.length === 0){
+  if (photos.length === 0) {
     query.get().then((value) => {
       setPhotos(value.docs.map((v) => ({
         src: v.data().base64,
@@ -268,12 +268,12 @@ function VistaDisegni (props) {
       })));
     });
   }
-  if (photos.lenght < 1){
+  if (photos.lenght < 1) {
     return <p>Ancora non ci sono immagini in questa zona, aggiungi tu la prima!</p>
   }
   return (
-    <div style={{overflow: 'auto', height: '100vh', display: 'block', position:"relative", marginBottom:"700px"}}>
-      <Gallery photos={photos} onClick={openLightbox}/>
+    <div style={{ overflow: 'auto', height: '100vh', display: 'block', position: "relative", marginBottom: "700px" }}>
+      <Gallery photos={photos} onClick={openLightbox} />
       <ModalGateway>
         {viewerIsOpen ? (
           <Modal onClose={closeLightbox}>
@@ -292,13 +292,13 @@ function VistaDisegni (props) {
   )
 }
 
-function DisegniOMappa(props){
-  if (! props.vistaMappa){
+function DisegniOMappa(props) {
+  if (!props.vistaMappa) {
     return <VistaDisegni
-    isGeolocationAvailable={props.isGeolocationAvailable}
-    isGeolocationEnabled={props.isGeolocationEnabled}
-    coords={props.coords}
-  />
+      isGeolocationAvailable={props.isGeolocationAvailable}
+      isGeolocationEnabled={props.isGeolocationEnabled}
+      coords={props.coords}
+    />
   } else {
     return <VistaMappa />
   }
@@ -325,26 +325,26 @@ class Disegno extends React.Component {
       .then(doc => {
         if (doc.exists) {
           let dis_ = doc.data().d.disegno;
-          if(dis_ !== undefined){
-            this.setState({ datiDisegno: dis_ }).catch(err =>{});
+          if (dis_ !== undefined) {
+            this.setState({ datiDisegno: dis_ }).catch(err => { });
           }
         }
       })
       .catch(err => {
-        if (localDisegno != null){
+        if (localDisegno != null) {
           this.setState({
             datiDisegno: localDisegno,
-           })
+          })
         }
       });
   }
 
   handleChange = () => {
-    this.setState({vistaMappa: !this.state.vistaMappa});
+    this.setState({ vistaMappa: !this.state.vistaMappa });
   };
 
   render() {
-    if (this.props.vistaDisegni){
+    if (this.props.vistaDisegni) {
       return (
         <div>
           <Fab
@@ -359,16 +359,16 @@ class Disegno extends React.Component {
               left: 'auto',
               position: 'fixed',
             }}
-            >
-              <MapIcon style={{ color: "white" }} onClick={() => this.handleChange()}/>
+          >
+            <MapIcon style={{ color: "white" }} onClick={() => this.handleChange()} />
           </Fab>
           <DisegniOMappa
-          isGeolocationAvailable={this.props.isGeolocationAvailable}
-          isGeolocationEnabled={this.props.isGeolocationEnabled}
-          coords={this.props.coords}
-          vistaMappa={this.state.vistaMappa}
+            isGeolocationAvailable={this.props.isGeolocationAvailable}
+            isGeolocationEnabled={this.props.isGeolocationEnabled}
+            coords={this.props.coords}
+            vistaMappa={this.state.vistaMappa}
           />
-      </div>)
+        </div>)
     }
     return (
       <div>
@@ -384,15 +384,15 @@ class Disegno extends React.Component {
             left: 'auto',
             position: 'fixed',
           }}
-          >
-            <Popup trigger={<ColorizeIcon style={{ color: "white" }}/>} position="left center">
-              <GithubPicker
-                triangle={'hide'}
-                color={ this.state.color }
-                onChangeComplete={ this.handleChangeComplete }
-                disableAlpha={ true }
-              />
-            </Popup>
+        >
+          <Popup trigger={<ColorizeIcon style={{ color: "white" }} />} position="left center">
+            <GithubPicker
+              triangle={'hide'}
+              color={this.state.color}
+              onChangeComplete={this.handleChangeComplete}
+              disableAlpha={true}
+            />
+          </Popup>
         </Fab>
         <Fab
           color="secondary"
@@ -406,15 +406,15 @@ class Disegno extends React.Component {
             left: 'auto',
             position: 'fixed',
           }}
-          >
-            <Popup trigger={
-            <SaveIcon style={{ color: "white" }}/>}
+        >
+          <Popup trigger={
+            <SaveIcon style={{ color: "white" }} />}
             position="left center">
             <LocationOk
-            isGeolocationAvailable={this.props.isGeolocationAvailable}
-            isGeolocationEnabled={this.props.isGeolocationEnabled}
-            coords={this.props.coords}
-            saveableCanvas={this.saveableCanvas}
+              isGeolocationAvailable={this.props.isGeolocationAvailable}
+              isGeolocationEnabled={this.props.isGeolocationEnabled}
+              coords={this.props.coords}
+              saveableCanvas={this.saveableCanvas}
             />
           </Popup>
         </Fab>
@@ -430,11 +430,11 @@ class Disegno extends React.Component {
             left: 'auto',
             position: 'fixed',
           }}
-          >
-            <UndoIcon onClick={() => {
-              this.saveableCanvas.undo();
-            }}
-            style={{ color: "white" }}/>
+        >
+          <UndoIcon onClick={() => {
+            this.saveableCanvas.undo();
+          }}
+            style={{ color: "white" }} />
         </Fab>
         <Fab
           color="secondary"
@@ -448,13 +448,13 @@ class Disegno extends React.Component {
             left: 'auto',
             position: 'fixed',
           }}
-          >
-            <DeleteIcon onClick={() => {
-              this.saveableCanvas.clear();
-            }} style={{ color: "white" }}/>
+        >
+          <DeleteIcon onClick={() => {
+            this.saveableCanvas.clear();
+          }} style={{ color: "white" }} />
         </Fab>
 
-          <CanvasDraw
+        <CanvasDraw
           hideInterface={(isMobile) ? true : false}
           ref={canvasDraw => {
             this.saveableCanvas = canvasDraw;
@@ -469,13 +469,13 @@ class Disegno extends React.Component {
             zIndex: -1,
             position: "absolute",
           }}
-          />
+        />
       </div>
     );
   }
 }
 
-function Footer(){
+function Footer() {
   return (
     <AppBar position="fixed" color="primary" className={useStyles().footer} elevation={0}>
       <Toolbar>
@@ -515,7 +515,7 @@ class SignInScreen extends React.Component {
   // Listen to the Firebase Auth state and set the local state.
   componentDidMount() {
     this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
-        (user) => this.setState({isSignedIn: !!user})
+      (user) => this.setState({ isSignedIn: !!user })
     );
   }
 
@@ -525,7 +525,7 @@ class SignInScreen extends React.Component {
   }
 
   handleChange = () => {
-    this.setState({vistaDisegni: !this.state.vistaDisegni});
+    this.setState({ vistaDisegni: !this.state.vistaDisegni });
   };
 
   render() {
@@ -533,8 +533,8 @@ class SignInScreen extends React.Component {
       return (
         <div>
           <div
-          style={{
-            backgroundColor: "#315190",
+            style={{
+              backgroundColor: "#315190",
             }}>
             <Grid
               container
@@ -543,51 +543,51 @@ class SignInScreen extends React.Component {
               alignItems="center"
               justify="center"
               spacing={1}
-              style={{ minHeight: '100vh', overflowY: "scroll"}}
+              style={{ minHeight: '100vh', overflowY: "scroll" }}
             >
               <Grid item xs={12} >
-              <Card style={{ maxWidth: 345, backgroundColor: 'transparent', marginBottom:"-50px"}} elevation={0}>
-                <CardMedia
-                  style={{
-                    height: 170,
-                    backgroundColor: 'transparent',
-                  }}
-                  image={logo}
-                  title="Contemplative Reptile"
-                  component="img"
-                />
+                <Card style={{ maxWidth: 345, backgroundColor: 'transparent', marginBottom: "-50px" }} elevation={0}>
+                  <CardMedia
+                    style={{
+                      height: 170,
+                      backgroundColor: 'transparent',
+                    }}
+                    image={logo}
+                    title="Contemplative Reptile"
+                    component="img"
+                  />
                 </Card>
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="h1" component="h2">
-                Art@Hack
+                  Art@Hack
                 </Typography>
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="h5" component="h5">
-                Una grande opera d'arte collettiva.
+                  Una grande opera d'arte collettiva.
                 </Typography>
               </Grid>
               <Grid item xs={12}>
-              <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>
+                <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()} />
               </Grid>
             </Grid>
           </div>
-          <Footer/>
-      </div>
+          <Footer />
+        </div>
       );
     }
     return (
       <div>
         <BottomAppBar
-        vistaDisegni={this.state.vistaDisegni}
-        handleChange={this.handleChange}
+          vistaDisegni={this.state.vistaDisegni}
+          handleChange={this.handleChange}
         />
         <Disegno
-        isGeolocationAvailable={this.props.isGeolocationAvailable}
-        isGeolocationEnabled={this.props.isGeolocationEnabled}
-        coords={this.props.coords}
-        vistaDisegni={this.state.vistaDisegni}
+          isGeolocationAvailable={this.props.isGeolocationAvailable}
+          isGeolocationEnabled={this.props.isGeolocationEnabled}
+          coords={this.props.coords}
+          vistaDisegni={this.state.vistaDisegni}
         />
       </div>
     );
@@ -596,21 +596,21 @@ class SignInScreen extends React.Component {
 
 function App(props) {
   return (
-      <div>
-          <ThemeProvider theme={theme}>
-            <SignInScreen
-            isGeolocationAvailable={props.isGeolocationAvailable}
-            isGeolocationEnabled={props.isGeolocationEnabled}
-            coords={props.coords}
-            />
-          </ThemeProvider>
-      </div>
-    );
+    <div>
+      <ThemeProvider theme={theme}>
+        <SignInScreen
+          isGeolocationAvailable={props.isGeolocationAvailable}
+          isGeolocationEnabled={props.isGeolocationEnabled}
+          coords={props.coords}
+        />
+      </ThemeProvider>
+    </div>
+  );
 }
 
 export default geolocated({
   positionOptions: {
-      enableHighAccuracy: false,
+    enableHighAccuracy: false,
   },
   watchPosition: true,
   userDecisionTimeout: 5000,
