@@ -7,7 +7,7 @@ import 'firebaseui'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import 'firebase/analytics';
 import '@firebase/firestore'
-import { GeoCollectionReference, GeoFirestore, GeoQuery, GeoQuerySnapshot } from 'geofirestore';
+import { GeoFirestore } from 'geofirestore';
 
 import { geolocated } from "react-geolocated";
 import Gallery from "react-photo-gallery";
@@ -213,8 +213,8 @@ function LocationOk(props){
 function VistaMappa () {
   const [photos, setPhotos] = useState([]);
   const db = firebase.firestore();
-  let citiesRef = db.collection('disegno grande');
-  if (photos.length == 0){
+  let citiesRef = db.collection('disegno grande').orderBy("lat", 'desc');
+  if (photos.length === 0){
     citiesRef.get().then((value) => {
       setPhotos(value.docs.map((v) => ({
         src: "data:image/png;base64," + v.data().base64.ci
