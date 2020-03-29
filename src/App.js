@@ -196,7 +196,8 @@ function LocationOk(props) {
   });
   return <Typography color="textPrimary" style={{ "textTransform": "lowercase" }}>
     {testo}
-    <Card style={{ backgroundColor: 'transparent' }} elevation={0}>
+    <Card style={{ backgroundColor: 'transparent' }} elevation={0}
+      onClick={() => window.open("https://donazioni.cri.it/donazioni/dona-per-emergenza-coronavirus")}>
       <CardMedia
         style={{
           height: 100,
