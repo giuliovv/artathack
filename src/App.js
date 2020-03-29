@@ -36,6 +36,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import UndoIcon from '@material-ui/icons/Undo';
 import SaveIcon from '@material-ui/icons/Save';
 import ImageIcon from '@material-ui/icons/Image';
+import MapIcon from '@material-ui/icons/Map';
 
 import banner from './banner_donazione.svg';
 import logo from './logo.svg';
@@ -209,6 +210,45 @@ function LocationOk(props){
       </Typography>
 }
 
+function VistaMappa () {
+  const [photos, setPhotos] = useState([]);
+  const db = firebase.firestore();
+  let citiesRef = db.collection('disegno grande');
+  if (photos.length == 0){
+    citiesRef.get().then((value) => {
+      setPhotos(value.docs.map((v) => ({
+        src: "data:image/png;base64," + v.data().base64.ci
+      })));
+    })
+    .catch(err => {
+      console.log('Error getting documents', err);
+    });
+  }
+  return (
+    <div style={{overflow: 'auto', height: '100vh', display: 'block', position:"relative", marginBottom:"700px"}}>
+      <Gallery photos={photos} />
+    </div>
+    )
+
+  // else {
+  //   query = geofirestore.collection('disegni').near({ center: new firebase.firestore.GeoPoint(puntoSpeciale[0], puntoSpeciale[1]), radius: 1000 }).limit(30);
+  // }
+  // if (photos.length === 0){
+  //   query.get().then((value) => {
+  //     setPhotos(value.docs.map((v) => ({
+  //       src: v.data().base64,
+  //       height: altezza,
+  //       width: larghezza,
+  //     })));
+  //   });
+  // }
+  // return (
+  //   <div style={{overflow: 'auto', height: '100vh', display: 'block', position:"relative", marginBottom:"700px"}}>
+  //     <Gallery photos={photos} />
+  //   </div>
+
+}
+
 function VistaDisegni (props) {
   const db = firebase.firestore();
   const geofirestore = new GeoFirestore(db);
@@ -216,6 +256,7 @@ function VistaDisegni (props) {
 
   const [currentImage, setCurrentImage] = useState(0);
   const [viewerIsOpen, setViewerIsOpen] = useState(false);
+
   const openLightbox = useCallback((event, { photo, index }) => {
     setCurrentImage(index);
     setViewerIsOpen(true);
@@ -268,13 +309,25 @@ function VistaDisegni (props) {
   )
 }
 
+function DisegniOMappa(props){
+  if (! props.vistaMappa){
+    return <VistaDisegni
+    isGeolocationAvailable={props.isGeolocationAvailable}
+    isGeolocationEnabled={props.isGeolocationEnabled}
+    coords={props.coords}
+  />
+  } else {
+    return <VistaMappa />
+  }
+}
 
 class Disegno extends React.Component {
 
   state = {
     color: "#444",
     datiDisegno: null,
-    giaFatto: false
+    giaFatto: false,
+    vistaMappa: false,
   };
 
   handleChangeComplete = (color, event) => {
@@ -301,15 +354,38 @@ class Disegno extends React.Component {
            })
         }
       });
-}
+  }
+
+  handleChange = () => {
+    this.setState({vistaMappa: !this.state.vistaMappa});
+  };
 
   render() {
     if (this.props.vistaDisegni){
-      return (<VistaDisegni
-            isGeolocationAvailable={this.props.isGeolocationAvailable}
-            isGeolocationEnabled={this.props.isGeolocationEnabled}
-            coords={this.props.coords}
-      />)
+      return (
+        <div>
+          <Fab
+            color="secondary"
+            aria-label="colore"
+            style={{
+              margin: 0,
+              zIndex: 1,
+              top: 'auto',
+              right: 20,
+              bottom: 80,
+              left: 'auto',
+              position: 'fixed',
+            }}
+            >
+              <MapIcon style={{ color: "white" }} onClick={() => this.handleChange()}/>
+          </Fab>
+          <DisegniOMappa
+          isGeolocationAvailable={this.props.isGeolocationAvailable}
+          isGeolocationEnabled={this.props.isGeolocationEnabled}
+          coords={this.props.coords}
+          vistaMappa={this.state.vistaMappa}
+          />
+      </div>)
     }
     return (
       <div>
