@@ -387,11 +387,13 @@ class Disegno extends React.Component {
           ref={canvasDraw => {
             this.saveableCanvas = canvasDraw;
           }}
+          canvasWidth={window.innerWidth}
+          canvasHeight={window.innerHeight - 55}
+          lazyRadius={0}
+          brushRadius={(isMobile) ? 3 : 8}
           saveData={this.state.datiDisegno}
           brushColor={this.state.color}
           style={{
-            width: window.innerWidth,
-            height: window.innerHeight - 65,
             zIndex: -1,
             position: "absolute",
           }}
