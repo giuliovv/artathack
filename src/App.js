@@ -15,7 +15,7 @@ import Carousel, { Modal, ModalGateway } from "react-images";
 
 import Popup from "reactjs-popup";
 import CanvasDraw from "react-canvas-draw";
-import { SketchPicker } from 'react-color';
+import { GithubPicker } from 'react-color';
 import { isMobile } from "react-device-detect";
 
 import AppBar from '@material-ui/core/AppBar';
@@ -327,7 +327,7 @@ class Disegno extends React.Component {
           }}
           >
             <Popup trigger={<ColorizeIcon style={{ color: "white" }}/>} position="left center">
-              <SketchPicker
+              <GithubPicker
                 color={ this.state.color }
                 onChangeComplete={ this.handleChangeComplete }
                 disableAlpha={ true }
@@ -399,6 +399,8 @@ class Disegno extends React.Component {
           ref={canvasDraw => {
             this.saveableCanvas = canvasDraw;
           }}
+          lazyRadius={0}
+          brushRadius={(isMobile) ? 3 : 7}
           saveData={this.state.datiDisegno}
           brushColor={this.state.color}
           style={{
