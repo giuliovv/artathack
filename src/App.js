@@ -404,6 +404,7 @@ class Disegno extends React.Component {
           >
             <Popup trigger={<ColorizeIcon style={{ color: "white" }}/>} position="left center">
               <GithubPicker
+                triangle={'hide'}
                 color={ this.state.color }
                 onChangeComplete={ this.handleChangeComplete }
                 disableAlpha={ true }
