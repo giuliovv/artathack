@@ -1,7 +1,8 @@
 # Art@Hack
 ## An Hack@Home project
 
-How can we help during this difficult time?
+How can non-medical help during this difficult time?
+
 https://giuliovv.github.io/spesa/
 
 Most creative idea winner!
