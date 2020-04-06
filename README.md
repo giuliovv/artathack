@@ -1,7 +1,9 @@
 # Art@Hack
 ## An Hack@Home project
 
-![alt text](https://giuliovv.github.io/spesa/static/media/logo.285086bb.svg)
+<p align="center">
+  <img src="https://giuliovv.github.io/spesa/static/media/logo.285086bb.svg" width="350" alt="Art@Hack">
+</p>
 
 How can non-medical help during this difficult time?
 
@@ -9,4 +11,4 @@ https://giuliovv.github.io/spesa/
 
 Most creative idea winner!
 
-A project about distributed and shared art.
+A project about distributed and shared art, built in less than 24 hours.
