@@ -5,7 +5,7 @@
   <img src="https://giuliovv.github.io/spesa/static/media/logo.285086bb.svg" width="350" alt="Art@Hack">
 </p>
 
-How can non-medical help during this difficult time?
+How can non-medicals help during this difficult time?
 
 https://giuliovv.github.io/spesa/
 
