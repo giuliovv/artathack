@@ -1,4 +1,4 @@
-# Art@Hack
+# Art@Hack :art: :art:
 ## An Hack@Home project
 
 <p align="center">
@@ -9,6 +9,6 @@ How can non-medical help during this difficult time?
 
 https://giuliovv.github.io/spesa/
 
-Most creative idea winner!
+Most creative idea winner! :bulb:
 
 A project about distributed and shared art, built in less than 24 hours.
