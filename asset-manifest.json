@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/spesa/static/css/main.0d10a121.chunk.css",
-    "main.js": "/spesa/static/js/main.beea236f.chunk.js",
-    "main.js.map": "/spesa/static/js/main.beea236f.chunk.js.map",
-    "runtime-main.js": "/spesa/static/js/runtime-main.fa788eee.js",
-    "runtime-main.js.map": "/spesa/static/js/runtime-main.fa788eee.js.map",
-    "static/js/2.ae206c99.chunk.js": "/spesa/static/js/2.ae206c99.chunk.js",
-    "static/js/2.ae206c99.chunk.js.map": "/spesa/static/js/2.ae206c99.chunk.js.map",
-    "index.html": "/spesa/index.html",
-    "precache-manifest.6307459e59b714ca173bddaa3d8bf593.js": "/spesa/precache-manifest.6307459e59b714ca173bddaa3d8bf593.js",
-    "service-worker.js": "/spesa/service-worker.js",
-    "static/css/main.0d10a121.chunk.css.map": "/spesa/static/css/main.0d10a121.chunk.css.map",
-    "static/js/2.ae206c99.chunk.js.LICENSE.txt": "/spesa/static/js/2.ae206c99.chunk.js.LICENSE.txt",
-    "static/media/banner_donazione.svg": "/spesa/static/media/banner_donazione.e146b080.svg",
-    "static/media/logo.svg": "/spesa/static/media/logo.285086bb.svg"
+    "main.css": "/artathack/static/css/main.0d10a121.chunk.css",
+    "main.js": "/artathack/static/js/main.205026f8.chunk.js",
+    "main.js.map": "/artathack/static/js/main.205026f8.chunk.js.map",
+    "runtime-main.js": "/artathack/static/js/runtime-main.30eaddad.js",
+    "runtime-main.js.map": "/artathack/static/js/runtime-main.30eaddad.js.map",
+    "static/js/2.e4b585e1.chunk.js": "/artathack/static/js/2.e4b585e1.chunk.js",
+    "static/js/2.e4b585e1.chunk.js.map": "/artathack/static/js/2.e4b585e1.chunk.js.map",
+    "index.html": "/artathack/index.html",
+    "precache-manifest.5e1b9342c29413a5c0230092e78578bf.js": "/artathack/precache-manifest.5e1b9342c29413a5c0230092e78578bf.js",
+    "service-worker.js": "/artathack/service-worker.js",
+    "static/css/main.0d10a121.chunk.css.map": "/artathack/static/css/main.0d10a121.chunk.css.map",
+    "static/js/2.e4b585e1.chunk.js.LICENSE.txt": "/artathack/static/js/2.e4b585e1.chunk.js.LICENSE.txt",
+    "static/media/banner_donazione.svg": "/artathack/static/media/banner_donazione.e146b080.svg",
+    "static/media/logo.svg": "/artathack/static/media/logo.285086bb.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.fa788eee.js",
-    "static/js/2.ae206c99.chunk.js",
+    "static/js/runtime-main.30eaddad.js",
+    "static/js/2.e4b585e1.chunk.js",
     "static/css/main.0d10a121.chunk.css",
-    "static/js/main.beea236f.chunk.js"
+    "static/js/main.205026f8.chunk.js"
   ]
 }
