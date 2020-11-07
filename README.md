@@ -7,7 +7,7 @@
 
 How can non-medicals help during this difficult time?
 
-https://giuliovv.github.io/spesa/
+https://giuliovv.github.io/artathack/
 
 Most creative idea winner! :bulb:
 
